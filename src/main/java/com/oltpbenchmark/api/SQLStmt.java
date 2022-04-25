@@ -36,6 +36,7 @@ public final class SQLStmt {
 
     private String orig_sql;
     private String sql;
+    private Integer resultSet;
 
     /**
      * For each unique '??' that we encounter in the SQL for this Statement,
@@ -52,6 +53,11 @@ public final class SQLStmt {
     public SQLStmt(String sql, int... substitutions) {
         this.substitutions = substitutions;
         this.setSQL(sql);
+        this.resultSet = null;
+    }
+    public SQLStmt(int resultSet, String sql, int... substitutions) {
+        this(sql, substitutions);
+        this.resultSet = resultSet;
     }
 
     /**
@@ -91,4 +97,7 @@ public final class SQLStmt {
         return "SQLStmt{" + this.sql + "}";
     }
 
+    public Integer getResultSet() {
+        return resultSet;
+    }
 }

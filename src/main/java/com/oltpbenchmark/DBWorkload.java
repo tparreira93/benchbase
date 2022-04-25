@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -58,6 +59,9 @@ public class DBWorkload {
      */
     public static void main(String[] args) throws Exception {
 
+
+        lsd.v2.Driver driverV2 = new lsd.v2.Driver();
+        DriverManager.registerDriver(driverV2);
         // create the command line parser
         CommandLineParser parser = new DefaultParser();
 
