@@ -1,0 +1,28 @@
+Benchmark,Driver,Scale,Terminal,Duration,NewOrder,Payment,OrderStatus,Delivery,StockLevel
+# Only New Orders
+tpcc,lsd,1,1,120,100,0,0,0,0
+tpcc,lsd,1,10,120,100,0,0,0,0
+tpcc,lsd,10,1,120,100,0,0,0,0
+tpcc,lsd,10,10,120,100,0,0,0,0
+tpcc,base,1,1,120,100,0,0,0,0
+tpcc,base,1,10,120,100,0,0,0,0
+tpcc,base,10,1,120,100,0,0,0,0
+tpcc,base,10,10,120,100,0,0,0,0
+# Only Payments
+tpcc,lsd,1,1,120,0,100,0,0,0
+tpcc,lsd,1,10,120,0,100,0,0,0
+tpcc,lsd,10,1,120,0,100,0,0,0
+tpcc,lsd,10,10,120,0,100,0,0,0
+tpcc,base,1,1,120,0,100,0,0,0
+tpcc,base,1,10,120,0,100,0,0,0
+tpcc,base,10,1,120,0,100,0,0,0
+tpcc,base,10,10,120,0,100,0,0,0
+# All transactions
+tpcc,lsd,1,1,120,45,43,4,4,4
+tpcc,lsd,1,10,120,45,43,4,4,4
+tpcc,lsd,10,1,120,45,43,4,4,4
+tpcc,lsd,10,10,120,45,43,4,4,4
+tpcc,base,1,1,120,45,43,4,4,4
+tpcc,base,1,10,120,45,43,4,4,4
+tpcc,base,10,1,120,45,43,4,4,4
+tpcc,base,10,10,120,45,43,4,4,4
