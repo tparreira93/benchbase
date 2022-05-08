@@ -3,8 +3,8 @@
 
     <!-- Connection details -->
     <type>POSTGRES</type>
-    <driver>lsd.v2.Driver</driver>
-    <url>$Driver://localhost:5432/benchbase?sslmode=disable&amp;ApplicationName=tpcc&amp;reWriteBatchedInserts=true</url>
+    <driver>$Driver</driver>
+    <url>$Connection/benchbase?sslmode=disable&amp;ApplicationName=tpcc&amp;reWriteBatchedInserts=true</url>
     <username>admin</username>
     <password>password</password>
     <isolation>TRANSACTION_SERIALIZABLE</isolation>
