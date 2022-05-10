@@ -23,13 +23,8 @@ def build_folder(output, benchmark, driver):
     return path
 
 
-def build_file_name(benchmark, driver, scale, terminals):
-    if driver.__contains__("lsd"):
-        driver = "lsd"
-    else:
-        driver = "base"
-
-    return benchmark + "_d" + driver + "_s" + scale + "_t" + terminals + ".xml"
+def build_file_name(benchmark, scale, terminals):
+    return benchmark + "_s" + scale + "_t" + terminals + ".xml"
 
 
 def find_index(data, value):
@@ -59,7 +54,7 @@ def create_test_configs(config_file_path: str, template_file_path: str, output: 
             for (k, v) in zip(keys, values[1:]):
                 template = template.replace("$" + k, fix_name(v))
 
-            file_name = build_file_name(benchmark, driver, scale, terminals)
+            file_name = build_file_name(benchmark, scale, terminals)
             output_folder = build_folder(output, benchmark, driver)
 
             path = os.path.join(output_folder, file_name)
