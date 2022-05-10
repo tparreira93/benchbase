@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 
 def run():
@@ -18,8 +19,8 @@ def run():
         return
 
     ax = plt.gca()
-    outfolder = Path(files[0][1]).parent
-    name = outfolder.name
+    output_folder = sys.argv[2]
+    name = str(Path(files[0][1]).parent) + "_" + datetime.now().strftime("%Y%m%d_%Hh%Mm%S")
     for driver, file in files:
         colname = driver.upper() + " Requests (per second)"
         df = pd.read_csv(file)
@@ -37,7 +38,7 @@ def run():
     # dfs.plot(kind='line', x='Time (seconds)', y='Throughput (requests/second)', ax=ax)
     # dfs.plot(kind='line', x='Time (seconds)', y='Throughput (requests/second)', color='red', ax=ax)
     # plt.show()
-    plt.savefig(os.path.join(str(outfolder), name + '.png'))
+    plt.savefig(os.path.join(str(output_folder), name + '.png'))
 
 
 if __name__ == '__main__':

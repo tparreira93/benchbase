@@ -6,6 +6,15 @@ from os import listdir
 import argparse
 
 
+def fix_name(string):
+    if string == "lsd":
+        return "lsd.v2.Driver"
+    elif string == "base":
+        return "org.postgresql.Driver"
+    else:
+        return string
+
+
 def build_folder(output, benchmark, driver):
     path = os.path.join(output, benchmark, driver)
     if not os.path.exists(path):
@@ -48,7 +57,7 @@ def create_test_configs(config_file_path: str, template_file_path: str, output: 
             template = template_config
             keys = template_keys[1:]
             for (k, v) in zip(keys, values[1:]):
-                template = template.replace("$" + k, v)
+                template = template.replace("$" + k, fix_name(v))
 
             file_name = build_file_name(benchmark, driver, scale, terminals)
             output_folder = build_folder(output, benchmark, driver)
@@ -95,12 +104,16 @@ def aggregate_results(config_dirs):
             parts = d.split("_")
             k = parts[0] + "_" + "_".join(parts[2:])
 
+            v = os.path.join(dir_name, p.stem)
             if k in agg:
-                agg[k].append(p.stem)
+                agg[k].append(v)
             else:
-                agg[k] = [p.stem]
+                agg[k] = [v]
 
-    return agg.values()
+    agg_dirs = list(agg.values())
+    distinct_benchmarks = [set([ str(Path(f).parent.parent) for f in p ]).pop() for p in agg_dirs]
+
+    return agg_dirs, distinct_benchmarks
 
 
 def run(args):
@@ -113,7 +126,7 @@ def run(args):
 
     commands = generate_commands(config_dirs)
 
-    with open("run.sh", "w+") as f:
+    with open(os.path.join(output, "run.sh"), "w+") as f:
         f.writelines(["#!/usr/bin/env bash", os.linesep])
 
         f.writelines(["pushd " + java, os.linesep])
@@ -123,10 +136,10 @@ def run(args):
 
         f.writelines(["popd", os.linesep])
 
-        plots = aggregate_results(config_dirs)
+        agg_dirs, distinct_benchmarks = aggregate_results(config_dirs)
 
-        for p in plots:
-            f.writelines(["python3 " + os.path.abspath("plot_data.py") + " " + " ".join(p), os.linesep])
+        for p, b in zip(agg_dirs, distinct_benchmarks):
+            f.writelines(["python3 " + os.path.abspath("plot_data.py") + " " + " ".join(p) + " " + b, os.linesep])
 
 
 if __name__ == '__main__':
