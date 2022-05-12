@@ -23,8 +23,24 @@ def build_folder(output, benchmark, driver):
     return path
 
 
-def build_file_name(benchmark, scale, terminals):
-    return benchmark + "_s" + scale + "_t" + terminals + ".xml"
+def build_test_name(params):
+    name = ""
+
+    value = params["DBPrefix"]
+    if "postgres" in value:
+        name = "psql"
+
+    for k in params.keys():
+        v = params[k]
+        if k in ["DBPrefix", "DBHost", "Driver"] or v == "0":
+            continue
+        c = ''.join([c for c in k if c.isupper()])
+        if len(c) == 1:
+            c = c + k[1:3]
+        if len(name) != 0:
+            name = name + "_"
+        name = name + c + v
+    return name
 
 
 def find_index(data, value):
@@ -47,17 +63,15 @@ def create_test_configs(config_file_path: str, template_file_path: str, output: 
         for values in config_lines:
             benchmark = values[find_index(template_keys, "benchmark")]
             driver = values[find_index(template_keys, "driver")]
-            scale = values[find_index(template_keys, "scale")]
-            terminals = values[find_index(template_keys, "terminals")]
             template = template_config
-            keys = template_keys[1:]
-            for (k, v) in zip(keys, values[1:]):
-                template = template.replace("$" + k, fix_name(v))
+            params = dict(zip(template_keys[1:], values[1:]))
+            for k in params.keys():
+                template = template.replace("$" + k, fix_name(params[k]))
 
-            file_name = build_file_name(benchmark, scale, terminals)
+            test_name = build_test_name(params)
             output_folder = build_folder(output, benchmark, driver)
 
-            path = os.path.join(output_folder, file_name)
+            path = os.path.join(output_folder, test_name + ".xml")
 
             with open(path, "w+") as f:
                 f.write(template)
