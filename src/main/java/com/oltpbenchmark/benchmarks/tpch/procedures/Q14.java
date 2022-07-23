@@ -27,25 +27,23 @@ import java.sql.SQLException;
 
 public class Q14 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""        
-            SELECT
-               100.00 * SUM(
-               CASE
-                  WHEN
-                     p_type LIKE 'PROMO%'
-                  THEN
-                     l_extendedprice * (1 - l_discount)
-                  ELSE
-                     0
-               END
-            ) / SUM(l_extendedprice * (1 - l_discount)) AS promo_revenue
-            FROM
-               lineitem, part
-            WHERE
-               l_partkey = p_partkey
-               AND l_shipdate >= DATE ?
-               AND l_shipdate < DATE ? + INTERVAL '1' MONTH
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               100.00 * SUM(\n" +
+            "               CASE\n" +
+            "                  WHEN\n" +
+            "                     p_type LIKE 'PROMO%'\n" +
+            "                  THEN\n" +
+            "                     l_extendedprice * (1 - l_discount)\n" +
+            "                  ELSE\n" +
+            "                     0\n" +
+            "               END\n" +
+            "            ) / SUM(l_extendedprice * (1 - l_discount)) AS promo_revenue\n" +
+            "            FROM\n" +
+            "               lineitem, part\n" +
+            "            WHERE\n" +
+            "               l_partkey = p_partkey\n" +
+            "               AND l_shipdate >= DATE ?\n" +
+            "               AND l_shipdate < DATE ? + INTERVAL '1' MONTH"
     );
 
     @Override

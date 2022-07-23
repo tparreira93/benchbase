@@ -28,56 +28,54 @@ import java.sql.SQLException;
 
 public class Q7 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               supp_nation,
-               cust_nation,
-               l_year,
-               SUM(volume) AS revenue
-            FROM
-               (
-                  SELECT
-                     n1.n_name AS supp_nation,
-                     n2.n_name AS cust_nation,
-                     EXTRACT(YEAR
-                  FROM
-                     l_shipdate) AS l_year,
-                     l_extendedprice * (1 - l_discount) AS volume
-                  FROM
-                     supplier,
-                     lineitem,
-                     orders,
-                     customer,
-                     nation n1,
-                     nation n2
-                  WHERE
-                     s_suppkey = l_suppkey
-                     AND o_orderkey = l_orderkey
-                     AND c_custkey = o_custkey
-                     AND s_nationkey = n1.n_nationkey
-                     AND c_nationkey = n2.n_nationkey
-                     AND
-                     (
-            (n1.n_name = ?
-                        AND n2.n_name = ? )
-                        OR
-                        (
-                           n1.n_name = ?
-                           AND n2.n_name = ?
-                        )
-                     )
-                     AND l_shipdate BETWEEN DATE '1995-01-01' AND DATE '1996-12-31'
-               )
-               AS shipping
-            GROUP BY
-               supp_nation,
-               cust_nation,
-               l_year
-            ORDER BY
-               supp_nation,
-               cust_nation,
-               l_year
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               supp_nation,\n" +
+            "               cust_nation,\n" +
+            "               l_year,\n" +
+            "               SUM(volume) AS revenue\n" +
+            "            FROM\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     n1.n_name AS supp_nation,\n" +
+            "                     n2.n_name AS cust_nation,\n" +
+            "                     EXTRACT(YEAR\n" +
+            "                  FROM\n" +
+            "                     l_shipdate) AS l_year,\n" +
+            "                     l_extendedprice * (1 - l_discount) AS volume\n" +
+            "                  FROM\n" +
+            "                     supplier,\n" +
+            "                     lineitem,\n" +
+            "                     orders,\n" +
+            "                     customer,\n" +
+            "                     nation n1,\n" +
+            "                     nation n2\n" +
+            "                  WHERE\n" +
+            "                     s_suppkey = l_suppkey\n" +
+            "                     AND o_orderkey = l_orderkey\n" +
+            "                     AND c_custkey = o_custkey\n" +
+            "                     AND s_nationkey = n1.n_nationkey\n" +
+            "                     AND c_nationkey = n2.n_nationkey\n" +
+            "                     AND\n" +
+            "                     (\n" +
+            "            (n1.n_name = ?\n" +
+            "                        AND n2.n_name = ? )\n" +
+            "                        OR\n" +
+            "                        (\n" +
+            "                           n1.n_name = ?\n" +
+            "                           AND n2.n_name = ?\n" +
+            "                        )\n" +
+            "                     )\n" +
+            "                     AND l_shipdate BETWEEN DATE '1995-01-01' AND DATE '1996-12-31'\n" +
+            "               )\n" +
+            "               AS shipping\n" +
+            "            GROUP BY\n" +
+            "               supp_nation,\n" +
+            "               cust_nation,\n" +
+            "               l_year\n" +
+            "            ORDER BY\n" +
+            "               supp_nation,\n" +
+            "               cust_nation,\n" +
+            "               l_year"
     );
 
     @Override

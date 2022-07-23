@@ -28,46 +28,44 @@ import java.util.Set;
 
 public class Q22 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""    
-            SELECT
-               cntrycode,
-               COUNT(*) AS numcust,
-               SUM(c_acctbal) AS totacctbal
-            FROM
-               (
-                  SELECT
-                     SUBSTRING(c_phone FROM 1 FOR 2) AS cntrycode,
-                     c_acctbal
-                  FROM
-                     customer
-                  WHERE
-                     SUBSTRING(c_phone FROM 1 FOR 2) IN (?, ?, ?, ?, ?, ?, ?)
-                     AND c_acctbal > 
-                     (
-                         SELECT
-                            AVG(c_acctbal)
-                         FROM
-                            customer
-                         WHERE
-                            c_acctbal > 0.00
-                            AND SUBSTRING(c_phone FROM 1 FOR 2) IN (?, ?, ?, ?, ?, ?, ?)
-                     )
-                     AND NOT EXISTS
-                     (
-                         SELECT
-                            *
-                         FROM
-                            orders
-                         WHERE
-                            o_custkey = c_custkey
-                     )
-               )
-               AS custsale
-            GROUP BY
-               cntrycode
-            ORDER BY
-               cntrycode
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               cntrycode,\n" +
+            "               COUNT(*) AS numcust,\n" +
+            "               SUM(c_acctbal) AS totacctbal\n" +
+            "            FROM\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     SUBSTRING(c_phone FROM 1 FOR 2) AS cntrycode,\n" +
+            "                     c_acctbal\n" +
+            "                  FROM\n" +
+            "                     customer\n" +
+            "                  WHERE\n" +
+            "                     SUBSTRING(c_phone FROM 1 FOR 2) IN (?, ?, ?, ?, ?, ?, ?)\n" +
+            "                     AND c_acctbal > \n" +
+            "                     (\n" +
+            "                         SELECT\n" +
+            "                            AVG(c_acctbal)\n" +
+            "                         FROM\n" +
+            "                            customer\n" +
+            "                         WHERE\n" +
+            "                            c_acctbal > 0.00\n" +
+            "                            AND SUBSTRING(c_phone FROM 1 FOR 2) IN (?, ?, ?, ?, ?, ?, ?)\n" +
+            "                     )\n" +
+            "                     AND NOT EXISTS\n" +
+            "                     (\n" +
+            "                         SELECT\n" +
+            "                            *\n" +
+            "                         FROM\n" +
+            "                            orders\n" +
+            "                         WHERE\n" +
+            "                            o_custkey = c_custkey\n" +
+            "                     )\n" +
+            "               )\n" +
+            "               AS custsale\n" +
+            "            GROUP BY\n" +
+            "               cntrycode\n" +
+            "            ORDER BY\n" +
+            "               cntrycode"
     );
 
     @Override

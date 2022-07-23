@@ -28,49 +28,47 @@ import java.sql.SQLException;
 
 public class Q21 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt(""" 
-            SELECT
-               s_name,
-               COUNT(*) AS numwait
-            FROM
-               supplier,
-               lineitem l1,
-               orders,
-               nation
-            WHERE
-               s_suppkey = l1.l_suppkey
-               AND o_orderkey = l1.l_orderkey
-               AND o_orderstatus = 'F'
-               AND l1.l_receiptdate > l1.l_commitdate
-               AND EXISTS
-               (
-                  SELECT
-                     *
-                  FROM
-                     lineitem l2
-                  WHERE
-                     l2.l_orderkey = l1.l_orderkey
-                     AND l2.l_suppkey <> l1.l_suppkey
-               )
-               AND NOT EXISTS
-               (
-                  SELECT
-                     *
-                  FROM
-                     lineitem l3
-                  WHERE
-                     l3.l_orderkey = l1.l_orderkey
-                     AND l3.l_suppkey <> l1.l_suppkey
-                     AND l3.l_receiptdate > l3.l_commitdate
-               )
-               AND s_nationkey = n_nationkey
-               AND n_name = ?
-            GROUP BY
-               s_name
-            ORDER BY
-               numwait DESC,
-               s_name LIMIT 100
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               s_name,\n" +
+            "               COUNT(*) AS numwait\n" +
+            "            FROM\n" +
+            "               supplier,\n" +
+            "               lineitem l1,\n" +
+            "               orders,\n" +
+            "               nation\n" +
+            "            WHERE\n" +
+            "               s_suppkey = l1.l_suppkey\n" +
+            "               AND o_orderkey = l1.l_orderkey\n" +
+            "               AND o_orderstatus = 'F'\n" +
+            "               AND l1.l_receiptdate > l1.l_commitdate\n" +
+            "               AND EXISTS\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     *\n" +
+            "                  FROM\n" +
+            "                     lineitem l2\n" +
+            "                  WHERE\n" +
+            "                     l2.l_orderkey = l1.l_orderkey\n" +
+            "                     AND l2.l_suppkey <> l1.l_suppkey\n" +
+            "               )\n" +
+            "               AND NOT EXISTS\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     *\n" +
+            "                  FROM\n" +
+            "                     lineitem l3\n" +
+            "                  WHERE\n" +
+            "                     l3.l_orderkey = l1.l_orderkey\n" +
+            "                     AND l3.l_suppkey <> l1.l_suppkey\n" +
+            "                     AND l3.l_receiptdate > l3.l_commitdate\n" +
+            "               )\n" +
+            "               AND s_nationkey = n_nationkey\n" +
+            "               AND n_name = ?\n" +
+            "            GROUP BY\n" +
+            "               s_name\n" +
+            "            ORDER BY\n" +
+            "               numwait DESC,\n" +
+            "               s_name LIMIT 100"
     );
 
     @Override

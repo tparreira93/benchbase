@@ -27,17 +27,15 @@ import java.sql.SQLException;
 
 public class Q6 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""                        
-            SELECT
-               SUM(l_extendedprice * l_discount) AS revenue
-            FROM
-               lineitem
-            WHERE
-               l_shipdate >= DATE ?
-               AND l_shipdate < DATE ? + INTERVAL '1' YEAR
-               AND l_discount BETWEEN ? - 0.01 AND ? + 0.01
-               AND l_quantity < ?
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               SUM(l_extendedprice * l_discount) AS revenue\n" +
+            "            FROM\n" +
+            "               lineitem\n" +
+            "            WHERE\n" +
+            "               l_shipdate >= DATE ?\n" +
+            "               AND l_shipdate < DATE ? + INTERVAL '1' YEAR\n" +
+            "               AND l_discount BETWEEN ? - 0.01 AND ? + 0.01\n" +
+            "               AND l_quantity < ?"
     );
 
     @Override

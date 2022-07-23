@@ -27,39 +27,37 @@ import java.sql.SQLException;
 
 public class Q10 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""      
-            SELECT
-               c_custkey,
-               c_name,
-               SUM(l_extendedprice * (1 - l_discount)) AS revenue,
-               c_acctbal,
-               n_name,
-               c_address,
-               c_phone,
-               c_comment
-            FROM
-               customer,
-               orders,
-               lineitem,
-               nation
-            WHERE
-               c_custkey = o_custkey
-               AND l_orderkey = o_orderkey
-               AND o_orderdate >= DATE ?
-               AND o_orderdate < DATE ? + INTERVAL '3' MONTH
-               AND l_returnflag = 'R'
-               AND c_nationkey = n_nationkey
-            GROUP BY
-               c_custkey,
-               c_name,
-               c_acctbal,
-               c_phone,
-               n_name,
-               c_address,
-               c_comment
-            ORDER BY
-               revenue DESC LIMIT 20
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               c_custkey,\n" +
+            "               c_name,\n" +
+            "               SUM(l_extendedprice * (1 - l_discount)) AS revenue,\n" +
+            "               c_acctbal,\n" +
+            "               n_name,\n" +
+            "               c_address,\n" +
+            "               c_phone,\n" +
+            "               c_comment\n" +
+            "            FROM\n" +
+            "               customer,\n" +
+            "               orders,\n" +
+            "               lineitem,\n" +
+            "               nation\n" +
+            "            WHERE\n" +
+            "               c_custkey = o_custkey\n" +
+            "               AND l_orderkey = o_orderkey\n" +
+            "               AND o_orderdate >= DATE ?\n" +
+            "               AND o_orderdate < DATE ? + INTERVAL '3' MONTH\n" +
+            "               AND l_returnflag = 'R'\n" +
+            "               AND c_nationkey = n_nationkey\n" +
+            "            GROUP BY\n" +
+            "               c_custkey,\n" +
+            "               c_name,\n" +
+            "               c_acctbal,\n" +
+            "               c_phone,\n" +
+            "               n_name,\n" +
+            "               c_address,\n" +
+            "               c_comment\n" +
+            "            ORDER BY\n" +
+            "               revenue DESC LIMIT 20"
     );
 
     @Override

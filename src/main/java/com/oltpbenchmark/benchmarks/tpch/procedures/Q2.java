@@ -28,52 +28,50 @@ import java.sql.SQLException;
 
 public class Q2 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-             SELECT
-                s_acctbal,
-                s_name,
-                n_name,
-                p_partkey,
-                p_mfgr,
-                s_address,
-                s_phone,
-                s_comment
-             FROM
-                part,
-                supplier,
-                partsupp,
-                nation,
-                region
-             WHERE
-                p_partkey = ps_partkey
-                AND s_suppkey = ps_suppkey
-                AND p_size = ?
-                AND p_type LIKE ?
-                AND s_nationkey = n_nationkey
-                AND n_regionkey = r_regionkey
-                AND r_name = ?
-                AND ps_supplycost =
-                (
-                   SELECT
-                      MIN(ps_supplycost)
-                   FROM
-                      partsupp,
-                      supplier,
-                      nation,
-                      region
-                   WHERE
-                      p_partkey = ps_partkey
-                      AND s_suppkey = ps_suppkey
-                      AND s_nationkey = n_nationkey
-                      AND n_regionkey = r_regionkey
-                      AND r_name = ?
-                )
-             ORDER BY
-                s_acctbal DESC,
-                n_name,
-                s_name,
-                p_partkey LIMIT 100
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "                s_acctbal,\n" +
+            "                s_name,\n" +
+            "                n_name,\n" +
+            "                p_partkey,\n" +
+            "                p_mfgr,\n" +
+            "                s_address,\n" +
+            "                s_phone,\n" +
+            "                s_comment\n" +
+            "             FROM\n" +
+            "                part,\n" +
+            "                supplier,\n" +
+            "                partsupp,\n" +
+            "                nation,\n" +
+            "                region\n" +
+            "             WHERE\n" +
+            "                p_partkey = ps_partkey\n" +
+            "                AND s_suppkey = ps_suppkey\n" +
+            "                AND p_size = ?\n" +
+            "                AND p_type LIKE ?\n" +
+            "                AND s_nationkey = n_nationkey\n" +
+            "                AND n_regionkey = r_regionkey\n" +
+            "                AND r_name = ?\n" +
+            "                AND ps_supplycost =\n" +
+            "                (\n" +
+            "                   SELECT\n" +
+            "                      MIN(ps_supplycost)\n" +
+            "                   FROM\n" +
+            "                      partsupp,\n" +
+            "                      supplier,\n" +
+            "                      nation,\n" +
+            "                      region\n" +
+            "                   WHERE\n" +
+            "                      p_partkey = ps_partkey\n" +
+            "                      AND s_suppkey = ps_suppkey\n" +
+            "                      AND s_nationkey = n_nationkey\n" +
+            "                      AND n_regionkey = r_regionkey\n" +
+            "                      AND r_name = ?\n" +
+            "                )\n" +
+            "             ORDER BY\n" +
+            "                s_acctbal DESC,\n" +
+            "                n_name,\n" +
+            "                s_name,\n" +
+            "                p_partkey LIMIT 100"
     );
 
     @Override

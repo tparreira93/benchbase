@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertNotEquals;
 
@@ -81,7 +82,7 @@ public class TestHSQLDBCatalog extends TestCase {
             assertEquals(num_tables, this.catalog.getTables().size());
 
             // Make sure that Map names match the Table names
-            for (String table_name : this.catalog.getTables().stream().map(AbstractCatalogObject::getName).toList()) {
+            for (String table_name : this.catalog.getTables().stream().map(AbstractCatalogObject::getName).collect(Collectors.toList())) {
                 Table catalog_tbl = this.catalog.getTable(table_name);
                 assertNotNull(catalog_tbl);
                 assertEquals(table_name, catalog_tbl.getName());

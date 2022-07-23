@@ -29,46 +29,44 @@ import java.sql.SQLException;
 
 public class Q20 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""     
-            SELECT
-               s_name,
-               s_address
-            FROM
-               supplier,
-               nation
-            WHERE
-               s_suppkey IN
-               (
-                  SELECT
-                     ps_suppkey
-                  FROM
-                     partsupp
-                  WHERE
-                     ps_partkey IN
-                     (
-                        SELECT
-                           p_partkey
-                        FROM
-                           part
-                        WHERE
-                           p_name LIKE ?
-                     )
-                     AND ps_availqty > (
-                     SELECT
-                        0.5 * SUM(l_quantity)
-                     FROM
-                        lineitem
-                     WHERE
-                        l_partkey = ps_partkey
-                        AND l_suppkey = ps_suppkey
-                        AND l_shipdate >= DATE ?
-                        AND l_shipdate < DATE ? + INTERVAL '1' YEAR )
-               )
-               AND s_nationkey = n_nationkey
-               AND n_name = ?
-            ORDER BY
-               s_name
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               s_name,\n" +
+            "               s_address\n" +
+            "            FROM\n" +
+            "               supplier,\n" +
+            "               nation\n" +
+            "            WHERE\n" +
+            "               s_suppkey IN\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     ps_suppkey\n" +
+            "                  FROM\n" +
+            "                     partsupp\n" +
+            "                  WHERE\n" +
+            "                     ps_partkey IN\n" +
+            "                     (\n" +
+            "                        SELECT\n" +
+            "                           p_partkey\n" +
+            "                        FROM\n" +
+            "                           part\n" +
+            "                        WHERE\n" +
+            "                           p_name LIKE ?\n" +
+            "                     )\n" +
+            "                     AND ps_availqty > (\n" +
+            "                     SELECT\n" +
+            "                        0.5 * SUM(l_quantity)\n" +
+            "                     FROM\n" +
+            "                        lineitem\n" +
+            "                     WHERE\n" +
+            "                        l_partkey = ps_partkey\n" +
+            "                        AND l_suppkey = ps_suppkey\n" +
+            "                        AND l_shipdate >= DATE ?\n" +
+            "                        AND l_shipdate < DATE ? + INTERVAL '1' YEAR )\n" +
+            "               )\n" +
+            "               AND s_nationkey = n_nationkey\n" +
+            "               AND n_name = ?\n" +
+            "            ORDER BY\n" +
+            "               s_name"
     );
 
     @Override

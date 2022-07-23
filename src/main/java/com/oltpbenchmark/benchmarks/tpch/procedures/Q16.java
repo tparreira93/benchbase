@@ -30,39 +30,37 @@ import java.util.Set;
 
 public class Q16 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""      
-            SELECT
-               p_brand,
-               p_type,
-               p_size,
-               COUNT(DISTINCT ps_suppkey) AS supplier_cnt
-            FROM
-               partsupp,
-               part
-            WHERE
-               p_partkey = ps_partkey
-               AND p_brand <> ?
-               AND p_type NOT LIKE ?
-               AND p_size IN (?, ?, ?, ?, ?, ?, ?, ?)
-               AND ps_suppkey NOT IN
-               (
-                  SELECT
-                     s_suppkey
-                  FROM
-                     supplier
-                  WHERE
-                     s_comment LIKE '%Customer%Complaints%'
-               )
-            GROUP BY
-               p_brand,
-               p_type,
-               p_size
-            ORDER BY
-               supplier_cnt DESC,
-               p_brand,
-               p_type,
-               p_size
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               p_brand,\n" +
+            "               p_type,\n" +
+            "               p_size,\n" +
+            "               COUNT(DISTINCT ps_suppkey) AS supplier_cnt\n" +
+            "            FROM\n" +
+            "               partsupp,\n" +
+            "               part\n" +
+            "            WHERE\n" +
+            "               p_partkey = ps_partkey\n" +
+            "               AND p_brand <> ?\n" +
+            "               AND p_type NOT LIKE ?\n" +
+            "               AND p_size IN (?, ?, ?, ?, ?, ?, ?, ?)\n" +
+            "               AND ps_suppkey NOT IN\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     s_suppkey\n" +
+            "                  FROM\n" +
+            "                     supplier\n" +
+            "                  WHERE\n" +
+            "                     s_comment LIKE '%Customer%Complaints%'\n" +
+            "               )\n" +
+            "            GROUP BY\n" +
+            "               p_brand,\n" +
+            "               p_type,\n" +
+            "               p_size\n" +
+            "            ORDER BY\n" +
+            "               supplier_cnt DESC,\n" +
+            "               p_brand,\n" +
+            "               p_type,\n" +
+            "               p_size"
     );
 
     @Override

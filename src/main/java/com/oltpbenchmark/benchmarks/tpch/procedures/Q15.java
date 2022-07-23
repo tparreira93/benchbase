@@ -27,47 +27,41 @@ import java.sql.Statement;
 
 public class Q15 extends GenericQuery {
 
-    public final SQLStmt createview_stmt = new SQLStmt("""
-            CREATE view revenue0 (supplier_no, total_revenue) AS
-            SELECT
-               l_suppkey,
-               SUM(l_extendedprice * (1 - l_discount))
-            FROM
-               lineitem
-            WHERE
-               l_shipdate >= DATE ?
-               AND l_shipdate < DATE ? + INTERVAL '3' MONTH
-            GROUP BY
-               l_suppkey
-            """
+    public final SQLStmt createview_stmt = new SQLStmt("CREATE view revenue0 (supplier_no, total_revenue) AS\n" +
+            "            SELECT\n" +
+            "               l_suppkey,\n" +
+            "               SUM(l_extendedprice * (1 - l_discount))\n" +
+            "            FROM\n" +
+            "               lineitem\n" +
+            "            WHERE\n" +
+            "               l_shipdate >= DATE ?\n" +
+            "               AND l_shipdate < DATE ? + INTERVAL '3' MONTH\n" +
+            "            GROUP BY\n" +
+            "               l_suppkey"
     );
 
-    public final SQLStmt query_stmt = new SQLStmt("""                        
-            SELECT
-               s_suppkey,
-               s_name,
-               s_address,
-               s_phone,
-               total_revenue
-            FROM
-               supplier,
-               revenue0
-            WHERE
-               s_suppkey = supplier_no
-               AND total_revenue = (
-                  SELECT
-                     MAX(total_revenue)
-                  FROM
-                     revenue0
-               )
-            ORDER BY
-               s_suppkey
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               s_suppkey,\n" +
+            "               s_name,\n" +
+            "               s_address,\n" +
+            "               s_phone,\n" +
+            "               total_revenue\n" +
+            "            FROM\n" +
+            "               supplier,\n" +
+            "               revenue0\n" +
+            "            WHERE\n" +
+            "               s_suppkey = supplier_no\n" +
+            "               AND total_revenue = (\n" +
+            "                  SELECT\n" +
+            "                     MAX(total_revenue)\n" +
+            "                  FROM\n" +
+            "                     revenue0\n" +
+            "               )\n" +
+            "            ORDER BY\n" +
+            "               s_suppkey"
     );
 
-    public final SQLStmt dropview_stmt = new SQLStmt("""
-            DROP VIEW revenue0
-            """
+    public final SQLStmt dropview_stmt = new SQLStmt("DROP VIEW revenue0"
     );
 
     @Override

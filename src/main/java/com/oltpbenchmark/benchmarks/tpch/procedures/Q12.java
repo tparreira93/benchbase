@@ -29,33 +29,31 @@ import java.sql.SQLException;
 
 public class Q12 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""            
-            SELECT
-               ps_partkey,
-               SUM(ps_supplycost * ps_availqty) AS VALUE
-            FROM
-               partsupp,
-               supplier,
-               nation
-            WHERE
-               ps_suppkey = s_suppkey
-               AND s_nationkey = n_nationkey
-               AND n_name = 'ETHIOPIA'
-            GROUP BY
-               ps_partkey
-            HAVING
-               SUM(ps_supplycost * ps_availqty) > (
-               SELECT
-                  SUM(ps_supplycost * ps_availqty) * ?
-               FROM
-                  partsupp, supplier, nation
-               WHERE
-                  ps_suppkey = s_suppkey
-                  AND s_nationkey = n_nationkey
-                  AND n_name = ? )
-               ORDER BY
-                  VALUE DESC
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               ps_partkey,\n" +
+            "               SUM(ps_supplycost * ps_availqty) AS VALUE\n" +
+            "            FROM\n" +
+            "               partsupp,\n" +
+            "               supplier,\n" +
+            "               nation\n" +
+            "            WHERE\n" +
+            "               ps_suppkey = s_suppkey\n" +
+            "               AND s_nationkey = n_nationkey\n" +
+            "               AND n_name = 'ETHIOPIA'\n" +
+            "            GROUP BY\n" +
+            "               ps_partkey\n" +
+            "            HAVING\n" +
+            "               SUM(ps_supplycost * ps_availqty) > (\n" +
+            "               SELECT\n" +
+            "                  SUM(ps_supplycost * ps_availqty) * ?\n" +
+            "               FROM\n" +
+            "                  partsupp, supplier, nation\n" +
+            "               WHERE\n" +
+            "                  ps_suppkey = s_suppkey\n" +
+            "                  AND s_nationkey = n_nationkey\n" +
+            "                  AND n_name = ? )\n" +
+            "               ORDER BY\n" +
+            "                  VALUE DESC"
     );
 
     @Override

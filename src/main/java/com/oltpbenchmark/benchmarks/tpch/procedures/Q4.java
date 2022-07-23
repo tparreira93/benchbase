@@ -27,30 +27,28 @@ import java.sql.SQLException;
 
 public class Q4 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""      
-            SELECT
-               o_orderpriority,
-               COUNT(*) AS order_count
-            FROM
-               orders
-            WHERE
-               o_orderdate >= DATE ?
-               AND o_orderdate < DATE ? + INTERVAL '3' MONTH
-               AND EXISTS
-               (
-                  SELECT
-                     *
-                  FROM
-                     lineitem
-                  WHERE
-                     l_orderkey = o_orderkey
-                     AND l_commitdate < l_receiptdate
-               )
-            GROUP BY
-               o_orderpriority
-            ORDER BY
-               o_orderpriority
-            """
+    public final SQLStmt query_stmt = new SQLStmt("            SELECT\n" +
+            "               o_orderpriority,\n" +
+            "               COUNT(*) AS order_count\n" +
+            "            FROM\n" +
+            "               orders\n" +
+            "            WHERE\n" +
+            "               o_orderdate >= DATE ?\n" +
+            "               AND o_orderdate < DATE ? + INTERVAL '3' MONTH\n" +
+            "               AND EXISTS\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     *\n" +
+            "                  FROM\n" +
+            "                     lineitem\n" +
+            "                  WHERE\n" +
+            "                     l_orderkey = o_orderkey\n" +
+            "                     AND l_commitdate < l_receiptdate\n" +
+            "               )\n" +
+            "            GROUP BY\n" +
+            "               o_orderpriority\n" +
+            "            ORDER BY\n" +
+            "               o_orderpriority"
     );
 
     @Override

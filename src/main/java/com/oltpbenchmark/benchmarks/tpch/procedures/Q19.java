@@ -26,46 +26,44 @@ import java.sql.SQLException;
 
 public class Q19 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               SUM(l_extendedprice* (1 - l_discount)) AS revenue
-            FROM
-               lineitem,
-               part
-            WHERE
-               (
-                  p_partkey = l_partkey
-                  AND p_brand = ?
-                  AND p_container IN ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG')
-                  AND l_quantity >= ?
-                  AND l_quantity <= ? + 10
-                  AND p_size BETWEEN 1 AND 5
-                  AND l_shipmode IN ('AIR', 'AIR REG')
-                  AND l_shipinstruct = 'DELIVER IN PERSON'
-               )
-               OR
-               (
-                  p_partkey = l_partkey
-                  AND p_brand = ?
-                  AND p_container IN ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK')
-                  AND l_quantity >= ?
-                  AND l_quantity <= ? + 10
-                  AND p_size BETWEEN 1 AND 10
-                  AND l_shipmode IN ('AIR', 'AIR REG')
-                  AND l_shipinstruct = 'DELIVER IN PERSON'
-               )
-               OR
-               (
-                  p_partkey = l_partkey
-                  AND p_brand = ?
-                  AND p_container IN ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG')
-                  AND l_quantity >= ?
-                  AND l_quantity <= ? + 10
-                  AND p_size BETWEEN 1 AND 15
-                  AND l_shipmode IN ('AIR', 'AIR REG')
-                  AND l_shipinstruct = 'DELIVER IN PERSON'
-               )
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               SUM(l_extendedprice* (1 - l_discount)) AS revenue\n" +
+            "            FROM\n" +
+            "               lineitem,\n" +
+            "               part\n" +
+            "            WHERE\n" +
+            "               (\n" +
+            "                  p_partkey = l_partkey\n" +
+            "                  AND p_brand = ?\n" +
+            "                  AND p_container IN ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG')\n" +
+            "                  AND l_quantity >= ?\n" +
+            "                  AND l_quantity <= ? + 10\n" +
+            "                  AND p_size BETWEEN 1 AND 5\n" +
+            "                  AND l_shipmode IN ('AIR', 'AIR REG')\n" +
+            "                  AND l_shipinstruct = 'DELIVER IN PERSON'\n" +
+            "               )\n" +
+            "               OR\n" +
+            "               (\n" +
+            "                  p_partkey = l_partkey\n" +
+            "                  AND p_brand = ?\n" +
+            "                  AND p_container IN ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK')\n" +
+            "                  AND l_quantity >= ?\n" +
+            "                  AND l_quantity <= ? + 10\n" +
+            "                  AND p_size BETWEEN 1 AND 10\n" +
+            "                  AND l_shipmode IN ('AIR', 'AIR REG')\n" +
+            "                  AND l_shipinstruct = 'DELIVER IN PERSON'\n" +
+            "               )\n" +
+            "               OR\n" +
+            "               (\n" +
+            "                  p_partkey = l_partkey\n" +
+            "                  AND p_brand = ?\n" +
+            "                  AND p_container IN ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG')\n" +
+            "                  AND l_quantity >= ?\n" +
+            "                  AND l_quantity <= ? + 10\n" +
+            "                  AND p_size BETWEEN 1 AND 15\n" +
+            "                  AND l_shipmode IN ('AIR', 'AIR REG')\n" +
+            "                  AND l_shipinstruct = 'DELIVER IN PERSON'\n" +
+            "               )"
     );
 
     @Override

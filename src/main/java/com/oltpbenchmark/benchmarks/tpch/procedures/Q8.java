@@ -28,54 +28,52 @@ import java.sql.SQLException;
 
 public class Q8 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               o_year,
-               SUM(
-               CASE
-                  WHEN
-                     nation = ?
-                  THEN
-                     volume
-                  ELSE
-                     0
-               END
-            ) / SUM(volume) AS mkt_share
-            FROM
-               (
-                  SELECT
-                     EXTRACT(YEAR
-                  FROM
-                     o_orderdate) AS o_year,
-                     l_extendedprice * (1 - l_discount) AS volume,
-                     n2.n_name AS nation
-                  FROM
-                     part,
-                     supplier,
-                     lineitem,
-                     orders,
-                     customer,
-                     nation n1,
-                     nation n2,
-                     region
-                  WHERE
-                     p_partkey = l_partkey
-                     AND s_suppkey = l_suppkey
-                     AND l_orderkey = o_orderkey
-                     AND o_custkey = c_custkey
-                     AND c_nationkey = n1.n_nationkey
-                     AND n1.n_regionkey = r_regionkey
-                     AND r_name = ?
-                     AND s_nationkey = n2.n_nationkey
-                     AND o_orderdate BETWEEN DATE '1995-01-01' AND DATE '1996-12-31'
-                     AND p_type = ?
-               )
-               AS all_nations
-            GROUP BY
-               o_year
-            ORDER BY
-               o_year
-            """
+    public final SQLStmt query_stmt = new SQLStmt("SELECT\n" +
+            "               o_year,\n" +
+            "               SUM(\n" +
+            "               CASE\n" +
+            "                  WHEN\n" +
+            "                     nation = ?\n" +
+            "                  THEN\n" +
+            "                     volume\n" +
+            "                  ELSE\n" +
+            "                     0\n" +
+            "               END\n" +
+            "            ) / SUM(volume) AS mkt_share\n" +
+            "            FROM\n" +
+            "               (\n" +
+            "                  SELECT\n" +
+            "                     EXTRACT(YEAR\n" +
+            "                  FROM\n" +
+            "                     o_orderdate) AS o_year,\n" +
+            "                     l_extendedprice * (1 - l_discount) AS volume,\n" +
+            "                     n2.n_name AS nation\n" +
+            "                  FROM\n" +
+            "                     part,\n" +
+            "                     supplier,\n" +
+            "                     lineitem,\n" +
+            "                     orders,\n" +
+            "                     customer,\n" +
+            "                     nation n1,\n" +
+            "                     nation n2,\n" +
+            "                     region\n" +
+            "                  WHERE\n" +
+            "                     p_partkey = l_partkey\n" +
+            "                     AND s_suppkey = l_suppkey\n" +
+            "                     AND l_orderkey = o_orderkey\n" +
+            "                     AND o_custkey = c_custkey\n" +
+            "                     AND c_nationkey = n1.n_nationkey\n" +
+            "                     AND n1.n_regionkey = r_regionkey\n" +
+            "                     AND r_name = ?\n" +
+            "                     AND s_nationkey = n2.n_nationkey\n" +
+            "                     AND o_orderdate BETWEEN DATE '1995-01-01' AND DATE '1996-12-31'\n" +
+            "                     AND p_type = ?\n" +
+            "               )\n" +
+            "               AS all_nations\n" +
+            "            GROUP BY\n" +
+            "               o_year\n" +
+            "            ORDER BY\n" +
+            "               o_year"
     );
 
     @Override
