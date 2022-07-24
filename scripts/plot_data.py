@@ -173,7 +173,7 @@ def run():
         lsd_results = compute_statistics(lsd_results, window=window)
         base_resuts = compute_statistics(base_results, window=window)
 
-        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
         fig.suptitle(title)
         create_plot_df(lsd_results, "lsd", "throughput", "Requests (" + str(window) + " second rolling window)",
                        "Time (sec)", "tpmC", axes[0])
@@ -189,6 +189,7 @@ def run():
         # plt.show()
         plt.savefig(os.path.join(base_dir, item + ".svg"))
         plt.savefig(os.path.join(base_dir, item + ".png"))
+        plt.savefig(os.path.join(base_dir, item + ".pdf"))
 
 
 if __name__ == '__main__':
