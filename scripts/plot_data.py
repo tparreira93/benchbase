@@ -12,6 +12,7 @@ from tkinter import W
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+import re
 
 
 def rename(df):
@@ -93,37 +94,34 @@ def join_files(files):
     return final_df
 
 
-def enhance_data(df: pd.DataFrame, window):
-    start = datetime.fromtimestamp(df["Start Time (microseconds)"].min())
+def enhance_data(df: pd.DataFrame):
     end = datetime.fromtimestamp(df["Start Time (microseconds)"].max())
-    run_duration = (end - start).total_seconds()
-    buckets = list(range(0, int(run_duration) + window, window))
     results = df.copy()
-    results["start_date"] = df.apply(lambda row: datetime.fromtimestamp(row['Start Time (microseconds)']),
-                                axis=1)
+    results["start_date"] = df.apply(lambda row: datetime.fromtimestamp(row['Start Time (microseconds)']), axis=1)
     results["time"] = results.apply(lambda row: (end - row["start_date"]).total_seconds(), axis=1)
     results["result"] = 1
-    results["time_bucket"] = results.apply(lambda row: buckets[floor(row["time"] / window)], axis=1)
+    results["time_bucket"] = results.apply(lambda row: floor(row["time"]), axis=1)
     results["latency"] = results["Latency (microseconds)"].apply((lambda row: row / 1000))
 
-    return buckets, results
+    return results
 
 
 def compute_statistics(df: pd.DataFrame, window=1):
-    buckets, extended_stats = enhance_data(df, window)
-
+    extended_stats = enhance_data(df)
     stats = extended_stats[["time_bucket", "time", "result", "latency"]]
+    max_time = extended_stats["time"].max()
 
     p99 = []
     throughput = []
+    buckets = range(floor(max_time))
 
-    for i in range(len(buckets)):
+    for i in buckets:
         s = max(i - window, 0)
 
         bucket_data: pd.DataFrame = stats.loc[(s <= stats["time_bucket"]) & (stats["time_bucket"] <= i)]
 
         requests = bucket_data.groupby(by="time_bucket").sum()
-        requests = requests[["result"]].median()[0]
+        requests = requests[["result"]].mean()[0]
         tpmC = (60 * requests) / window
         throughput.append(tpmC)
         p99.append(bucket_data[["latency"]].quantile(0.99)[0])
@@ -135,62 +133,62 @@ def compute_statistics(df: pd.DataFrame, window=1):
     return stats
 
 
+def get_value_of_match(match, input):
+    val = re.match(match, input)
+    return val.group(1)
+
+
+def create_title_name(file_name: str):
+    scale = get_value_of_match(r".*Sca(\d+)", file_name)
+    terminals = get_value_of_match(r".*Ter(\d+)", file_name)
+    duration = get_value_of_match(r".*Dur(\d+)", file_name)
+    new_order = get_value_of_match(r".*NO(\d+)", file_name)
+
+    scale_str = str.format("{} Warehouse", scale)
+    if int(scale) > 1:
+        scale_str += "s"
+
+    terminals_str = str.format("{} Terminal", terminals)
+    if int(terminals) > 1:
+        terminals_str += "s"
+
+    return str.format("New order - {} and {}", terminals_str, scale_str)
+
+
 def run():
     base_dir = "tpcc/run-23"
 
     base_tests = test_files(os.path.join(base_dir, "base"))
     lsd_tests = test_files(os.path.join(base_dir, "lsd"))
-    window = 1
-
+    window = 5
+    plt.rcParams.update({
+        "text.usetex": True,
+        "font.family": "sans-serif"
+    })
     for item in base_tests:
+        title = create_title_name(item)
         lsd_results = join_files(lsd_tests[item])
         base_results = join_files(base_tests[item])
 
         lsd_results = compute_statistics(lsd_results, window=window)
         base_resuts = compute_statistics(base_results, window=window)
 
-        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 8))
-        create_plot_df(lsd_results, "lsd", "throughput", "Requests (" + str(window) + " second window average)",
+        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+        fig.suptitle(title)
+        create_plot_df(lsd_results, "lsd", "throughput", "Requests (" + str(window) + " second rolling window)",
                        "Time (sec)", "tpmC", axes[0])
-        create_plot_df(lsd_results, "lsd", "latency", "Latency (" + str(window) + " second)", "Time (sec)",
+        create_plot_df(lsd_results, "lsd", "latency", "P99th Latency (" + str(window) + " second rolling window)",
+                       "Time (sec)",
                        "Latency (ms)", axes[1])
-        create_plot_df(base_resuts, "base", "throughput", "Requests (" + str(window) + " second window average)",
+        create_plot_df(base_resuts, "base", "throughput", "Requests (" + str(window) + " second rolling window)",
                        "Time (sec)", "tpmC", axes[0])
-        create_plot_df(base_resuts, "base", "latency", "Latency (" + str(window) + " second)", "Time (sec)",
+        create_plot_df(base_resuts, "base", "latency", "P99th Latency (" + str(window) + " second rolling window)",
+                       "Time (sec)",
                        "Latency (ms)", axes[1])
 
-        plt.show()
-        # plt.savefig(os.path.join(base_dir, item))
-
-    # files = find_plotable_data("results")
-    # output_path = sys.argv[-1]
-
-    # fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 8))
-
-    # outfile_name = os.path.join(output_path,
-    #                             "Requests (5 sec samples)" + "_" + datetime.now().strftime("%Y%m%d_%Hh%Mm") + '.png')
-    # title = "Requests (5 sec)"
-    # create_plot("Requests (sec)", files, title, ax=axes[0, 0])
-
-    # # outfile_name = os.path.join(output_path, "Avg. Latency" + "_" + datetime.now().strftime("%Y%m%d_%Hh%Mm") + '.png')
-    # # title = "Avg Latency"
-    # # create_plot("Avg. Latency (ms)", files, title, ax=axes[1, 0])
-
-    # outfile_name = os.path.join(output_path, "P99 Latency" + "_" + datetime.now().strftime("%Y%m%d_%Hh%Mm") + '.png')
-    # title = "P99 Latency"
-    # create_plot("P99 Latency (ms)", files, title, ax=axes[0, 1])
-
-    # files = find_plotable_data("samples")
-
-    # # outfile_name = os.path.join(output_path,
-    # #                             "Requests (1 sec sample)" + "_" + datetime.now().strftime("%Y%m%d_%Hh%Mm") + '.png')
-    # # title = "Requests (1 sec)"
-    # # create_plot("Requests (sec)", files, title, ax=axes[0, 1])
-
-    # fig.tight_layout(pad=2.0)
-    # outfile_name = os.path.join(output_path, str(Path(files[0][1]).parent.name) + "_" + datetime.now().strftime(
-    #     "%Y%m%d_%Hh%Mm") + '.png')
-    # plt.savefig(outfile_name)
+        # plt.show()
+        plt.savefig(os.path.join(base_dir, item + ".svg"))
+        plt.savefig(os.path.join(base_dir, item + ".png"))
 
 
 if __name__ == '__main__':
