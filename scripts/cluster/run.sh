@@ -99,4 +99,6 @@ if [ "$host" = "$database" ]; then
     wait_all_workers "$worker_tests_completed" "$wokers_count"
 
     ./stop.sh
+
+    ./plot_data.py "${run_dir}"
 fi

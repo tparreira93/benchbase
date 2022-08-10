@@ -13,6 +13,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 import re
+import argparse
 
 
 def rename(df):
@@ -155,8 +156,8 @@ def create_title_name(file_name: str):
     return str.format("New order - {} and {}", terminals_str, scale_str)
 
 
-def run():
-    base_dir = "tpcc/run-23"
+def run(args):
+    base_dir = args.directory
 
     base_tests = test_files(os.path.join(base_dir, "base"))
     lsd_tests = test_files(os.path.join(base_dir, "lsd"))
@@ -192,4 +193,13 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-d",
+        "--directory",
+        dest="directory",
+        help="Directory with run results"
+    )
+
+    args = parser.parse_args()
+    run(args)
