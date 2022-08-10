@@ -3,7 +3,7 @@
 user="tparreira"
 host=$(hostname)
 
-JAVA_OPTIONS="-Xms1024m -Xmx1024m"
+JAVA_OPTIONS="-Xms2g -Xmx2g"
 
 source "/home/jlourenco/tparreira/sync_nodes.sh"
 

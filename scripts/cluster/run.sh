@@ -2,6 +2,7 @@
 
 wokers_count=$1
 tests=$2
+database=$3
 
 host=$(hostname)
 user="tparreira"
@@ -69,7 +70,7 @@ function run_benchmarks() {
     done < "$test_file"
 }
 
-if [ "$host" = "charmander-2" ]; then
+if [ "$host" = "$database" ]; then
     echo "Starting database..."
     start_cluster
     echo "The server has started!"
@@ -94,7 +95,7 @@ else
 fi
 
 
-if [ "$host" = "charmander-2" ]; then
+if [ "$host" = "$database" ]; then
     wait_all_workers "$worker_tests_completed" "$wokers_count"
 
     ./stop.sh
