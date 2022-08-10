@@ -49,7 +49,7 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
 
     }
 
-    public void addLatency(int transType, long startNanosecond, long endNanosecond, int workerId, int phaseId) {
+    public void addLatency(int transType, long startNanosecond, long endNanosecond, int workerId, int phaseId, int success, int retries, int abort, int error) {
 
 
         if (nextIndex == ALLOC_SIZE) {
@@ -62,7 +62,7 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
         int latencyMicroseconds = (int) ((endNanosecond - startNanosecond + 500) / 1000);
 
 
-        chunk[nextIndex] = new Sample(transType, startOffsetNanosecond, latencyMicroseconds, workerId, phaseId);
+        chunk[nextIndex] = new Sample(transType, startOffsetNanosecond, latencyMicroseconds, workerId, phaseId, success, retries, abort, error);
         ++nextIndex;
 
         lastNanosecond += startOffsetNanosecond;
@@ -94,13 +94,21 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
         private final int latencyMicrosecond;
         private final int workerId;
         private final int phaseId;
+        private final int success;
+        private final int retries;
+        private final int abort;
+        private final int error;
 
-        public Sample(int transactionType, long startNanosecond, int latencyMicrosecond, int workerId, int phaseId) {
+        public Sample(int transactionType, long startNanosecond, int latencyMicrosecond, int workerId, int phaseId, int success, int retries, int abort, int error) {
             this.transactionType = transactionType;
             this.startNanosecond = startNanosecond;
             this.latencyMicrosecond = latencyMicrosecond;
             this.workerId = workerId;
             this.phaseId = phaseId;
+            this.success = success;
+            this.retries = retries;
+            this.abort = abort;
+            this.error = error;
         }
 
         public int getTransactionType() {
@@ -136,6 +144,22 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
 
                 return 0;
             }
+        }
+
+        public int getSuccess() {
+            return success;
+        }
+
+        public int getRetries() {
+            return retries;
+        }
+
+        public int getAbort() {
+            return abort;
+        }
+
+        public int getError() {
+            return error;
         }
     }
 

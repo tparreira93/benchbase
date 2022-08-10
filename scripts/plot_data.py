@@ -173,16 +173,15 @@ def run():
         lsd_results = compute_statistics(lsd_results, window=window)
         base_resuts = compute_statistics(base_results, window=window)
 
-        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
-        fig.suptitle(title)
-        create_plot_df(lsd_results, "lsd", "throughput", "Requests (" + str(window) + " second rolling window)",
+        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 3.5))
+        create_plot_df(lsd_results, "lsd", "throughput", "Requests (" + str(window) + " sec. rolling window)",
                        "Time (sec)", "tpmC", axes[0])
-        create_plot_df(lsd_results, "lsd", "latency", "P99th Latency (" + str(window) + " second rolling window)",
+        create_plot_df(lsd_results, "lsd", "latency", "P99th Latency (" + str(window) + " sec. rolling window)",
                        "Time (sec)",
                        "Latency (ms)", axes[1])
-        create_plot_df(base_resuts, "base", "throughput", "Requests (" + str(window) + " second rolling window)",
+        create_plot_df(base_resuts, "base", "throughput", "Requests (" + str(window) + " sec. rolling window)",
                        "Time (sec)", "tpmC", axes[0])
-        create_plot_df(base_resuts, "base", "latency", "P99th Latency (" + str(window) + " second rolling window)",
+        create_plot_df(base_resuts, "base", "latency", "P99th Latency (" + str(window) + " sec. rolling window)",
                        "Time (sec)",
                        "Latency (ms)", axes[1])
 

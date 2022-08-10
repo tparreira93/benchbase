@@ -208,7 +208,11 @@ public class ResultWriter {
                 "Start Time (microseconds)",
                 "Latency (microseconds)",
                 "Worker Id (start number)",
-                "Phase Id (index in config file)"
+                "Phase Id (index in config file)",
+                "Error",
+                "Aborted",
+                "Retries",
+                "Success",
         };
         out.println(StringUtil.join(",", header));
         for (LatencyRecord.Sample s : results.getLatencySamples()) {
@@ -218,10 +222,14 @@ public class ResultWriter {
                     // Important!
                     // The TxnType offsets start at 1!
                     activeTXTypes.get(s.getTransactionType() - 1).getName(),
-                    String.format("%10.6f", startUs - offset),
+                    String.format(Locale.ROOT, "%10.6f", startUs - offset),
                     Integer.toString(s.getLatencyMicrosecond()),
                     Integer.toString(s.getWorkerId()),
                     Integer.toString(s.getPhaseId()),
+                    Integer.toString(s.getError()),
+                    Integer.toString(s.getAbort()),
+                    Integer.toString(s.getRetries()),
+                    Integer.toString(s.getSuccess())
             };
             out.println(StringUtil.join(",", row));
         }

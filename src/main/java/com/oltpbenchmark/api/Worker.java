@@ -280,7 +280,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
 
                 long start = System.nanoTime();
 
-                doWork(configuration.getDatabaseType(), transactionType);
+                var results = doWork(configuration.getDatabaseType(), transactionType);
 
                 long end = System.nanoTime();
 
@@ -297,7 +297,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         // after the timer went off.
                         Phase postPhase = workloadState.getCurrentPhase();
                         if (preState == MEASURE && postPhase.getId() == prePhase.getId()) {
-                            latencies.addLatency(transactionType.getId(), start, end, this.id, prePhase.getId());
+                            latencies.addLatency(transactionType.getId(), start, end, this.id, prePhase.getId(), results.success, results.retryCount, results.abort, results.error);
                             intervalRequests.incrementAndGet();
                         }
                         if (prePhase.isLatencyRun()) {
@@ -376,13 +376,16 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
      * implementing worker should return the TransactionType handle that was
      * executed.
      *
-     * @param databaseType TODO
+     * @param databaseType    TODO
      * @param transactionType TODO
+     * @return
      */
-    protected final void doWork(DatabaseType databaseType, TransactionType transactionType) {
-
+    protected final ResultWrapper doWork(DatabaseType databaseType, TransactionType transactionType) {
+        int retryCount = 0;
+        int success = 0;
+        int abort = 0;
+        int error = 0;
         try {
-            int retryCount = 0;
             int maxRetryCount = configuration.getMaxRetries();
 
             while (retryCount < maxRetryCount && this.workloadState.getGlobalState() != State.DONE) {
@@ -406,7 +409,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     }
 
                     conn.commit();
-
+                    success = 1;
                     break;
 
                 } catch (UserAbortException ex) {
@@ -415,6 +418,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     ABORT_LOG.debug(String.format("%s Aborted", transactionType), ex);
 
                     status = TransactionStatus.USER_ABORTED;
+                    abort = 1;
 
                     break;
 
@@ -431,6 +435,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         LOG.warn(String.format("SQLException occurred during [%s] and will not be retried... sql state [%s], error code [%d].", transactionType, ex.getSQLState(), ex.getErrorCode()), ex);
 
                         status = TransactionStatus.ERROR;
+                        error = 1;
 
                         break;
                     }
@@ -472,7 +477,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
 
             throw new RuntimeException(msg, ex);
         }
-
+        return new ResultWrapper(success, abort, error, retryCount);
     }
 
     private boolean isRetryable(SQLException ex) {
@@ -546,4 +551,33 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
         return 0;
     }
 
+    public static class ResultWrapper {
+        private final int success;
+        private final int abort;
+        private final int error;
+        private final int retryCount;
+
+        public ResultWrapper(int success, int abort, int error, int retryCount) {
+            this.success = success;
+            this.abort = abort;
+            this.error = error;
+            this.retryCount = retryCount;
+        }
+
+        public int getSuccess() {
+            return success;
+        }
+
+        public int getAbort() {
+            return abort;
+        }
+
+        public int getError() {
+            return error;
+        }
+
+        public int getRetryCount() {
+            return retryCount;
+        }
+    }
 }
