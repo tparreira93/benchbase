@@ -213,6 +213,7 @@ public class ResultWriter {
                 "Aborted",
                 "Retries",
                 "Success",
+                "Commit latency"
         };
         out.println(StringUtil.join(",", header));
         for (LatencyRecord.Sample s : results.getLatencySamples()) {
@@ -229,7 +230,8 @@ public class ResultWriter {
                     Integer.toString(s.getError()),
                     Integer.toString(s.getAbort()),
                     Integer.toString(s.getRetries()),
-                    Integer.toString(s.getSuccess())
+                    Integer.toString(s.getSuccess()),
+                    Long.toString(s.getCommitDuration())
             };
             out.println(StringUtil.join(",", row));
         }
