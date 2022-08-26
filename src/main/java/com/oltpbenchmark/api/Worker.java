@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.oltpbenchmark.types.State.MEASURE;
@@ -186,6 +185,10 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
     public final void run() {
         Thread t = Thread.currentThread();
         t.setName(this.toString());
+        boolean lsd = false;
+        if (configuration.getBenchmarkName().toLowerCase().contains("lsd")) {
+            lsd = true;
+        }
 
         // In case of reuse reset the measurements
         latencies = new LatencyRecord(workloadState.getTestStartNs());
@@ -298,7 +301,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         // after the timer went off.
                         Phase postPhase = workloadState.getCurrentPhase();
                         if (preState == MEASURE && postPhase.getId() == prePhase.getId()) {
-                            latencies.addLatency(transactionType.getId(), start, end, this.id, prePhase.getId(), results.success, results.retryCount, results.abort, results.error, results.commitDuration);
+                            latencies.addLatency(transactionType.getId(), start, end, this.id, prePhase.getId(), results.success, results.retryCount, results.abort, results.error, results.commitLatency, lsd);
                             intervalRequests.incrementAndGet();
                         }
                         if (prePhase.isLatencyRun()) {
@@ -386,7 +389,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
         int success = 0;
         int abort = 0;
         int error = 0;
-        long commitDuration = 0;
+        int commitDuration = 0;
         try {
             int maxRetryCount = configuration.getMaxRetries();
 
@@ -417,7 +420,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     long endNanosecond = System.nanoTime();
                     success = 1;
 
-                    commitDuration = TimeUnit.NANOSECONDS.toMicros(endNanosecond - startNanosecond);
+                    commitDuration = (int) ((endNanosecond - startNanosecond + 500) / 1000);
                     break;
 
                 } catch (UserAbortException ex) {
@@ -564,14 +567,14 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
         private final int abort;
         private final int error;
         private final int retryCount;
-        private final long commitDuration;
+        private final int commitLatency;
 
-        public ResultWrapper(int success, int abort, int error, int retryCount, long commitDuration) {
+        public ResultWrapper(int success, int abort, int error, int retryCount, int commitLatency) {
             this.success = success;
             this.abort = abort;
             this.error = error;
             this.retryCount = retryCount;
-            this.commitDuration = commitDuration;
+            this.commitLatency = commitLatency;
         }
 
         public int getSuccess() {
@@ -590,8 +593,8 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
             return retryCount;
         }
 
-        public long getCommitDuration() {
-            return commitDuration;
+        public int getCommitLatency() {
+            return commitLatency;
         }
     }
 }
