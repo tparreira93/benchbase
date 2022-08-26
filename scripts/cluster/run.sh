@@ -1,7 +1,7 @@
-#!/usr/bin/bash
+#!/usr/bin/bash +x
 
-wokers_count=$1
-tests=$2
+worker_count=$1
+test_file=$2
 database=$3
 
 host=$(hostname)
@@ -11,94 +11,95 @@ config_dir="/home/jlourenco/$user/benchbase-postgres/tpcc"
 run=$(cat $run_file)
 run=$(expr $run + 1);
 run_dir="$config_dir/run-$run"
-worker_tests_completed="$run_dir/completions"
 load_ready_file="$run_dir/load-ready"
 
 source "/home/jlourenco/tparreira/start.sh"
 source "/home/jlourenco/tparreira/sync_nodes.sh"
 source "/home/jlourenco/tparreira/benchbase.sh"
 
-[ ! -d "$worker_tests_completed" ] && mkdir -p "$worker_tests_completed"
 [ ! -d "$run_dir" ] && mkdir -p "$run_dir"
 
-echo "Starting Run $run"
+echo "Starting run $run with $worker_count workers, ${test_file} test file and ${database} database..."
 
-function build_test_databases() {
-    local test_file
-
-    test_file=$1
-    
-    while read line; 
-    do 
-        stringarray=($line)
-        type=${stringarray[0]}
-        config=${stringarray[1]}
-        benchmark=${stringarray[2]}
-
-        echo "Loading database - Type: $type - Config: $config - Benchmark: $benchmark"
-
-        build_db $type $config $benchmark $run_host_dir
-    done < "$test_file"
-}
-
-function run_benchmarks() {
+function run_benchmark() {
     local run_config_dir
     local run_host_dir
-    local test_file
 
-    test_file=$1
+    local type
+    local config
+    local benchmark
 
-    while read line; 
-    do 
-        stringarray=($line)
-        type=${stringarray[0]}
-        config=${stringarray[1]}
-        benchmark=${stringarray[2]}
+    type=$1
+    config=$2
+    benchmark=$3
 
-        echo "Running test - Type: $type - Config: $config - Benchmark: $benchmark"
+    echo "Running test - Type: $type - Config: $config - Benchmark: $benchmark"
 
-        run_config_dir="$run_dir/$type/$config"
-        run_host_dir="$run_config_dir/$host"
-        
-        [ ! -d "$run_host_dir" ] && mkdir -p "$run_host_dir"
+    run_config_dir="$run_dir/$type/$config"
+    run_worker_ready_dir="$run_config_dir/running"
+    run_host_dir="$run_config_dir/$host"
 
-        set_worker_ready "$host" "$run_config_dir"
-        wait_all_workers "$run_config_dir" "$wokers_count"
+    [ ! -d "$run_host_dir" ] && mkdir -p "$run_host_dir"
+    [ ! -d "$run_worker_ready_dir" ] && mkdir -p "$run_worker_ready_dir"
 
-        benchmark_db $type $config $benchmark $run_host_dir
+    set_worker_ready "$host" "$run_worker_ready_dir"
+    wait_all_workers "$run_worker_ready_dir" "$worker_count"
 
-    done < "$test_file"
+    benchmark_db $type $config $benchmark $run_host_dir
 }
 
-if [ "$host" = "$database" ]; then
-    echo "Starting database..."
-    start_cluster
-    echo "The server has started!"
 
-    echo "Build databases..."
-    build_test_databases "$tests"
-    echo "Databases were built!"
+while read line;
+do
+    stringarray=($line)
+    type=${stringarray[0]}
+    config=${stringarray[1]}
+    benchmark=${stringarray[2]}
 
-    echo "Setting load as completed..."
-    set_worker_ready "load-$host" "$run_dir"
-    echo $run > $run_file
-    echo "Run file updated and load completed!"
-else
-    echo "Waiting for load to be completed..."
-    wait_all_workers "$run_dir" 1
+    run_config_dir="$run_dir/$type/$config"
+    load_completion="$run_config_dir/completions/load"
+    worker_tests_completed="$run_config_dir/completions/workers"
+    run_worker_ready_dir="$run_config_dir/running"
+    [ ! -d "$run_config_dir" ] && mkdir -p "$run_config_dir"
+    [ ! -d "$load_completion" ] && mkdir -p "$load_completion"
+    [ ! -d "$worker_tests_completed" ] && mkdir -p "$worker_tests_completed"
+    [ ! -d "$run_worker_ready_dir" ] && mkdir -p "$run_worker_ready_dir"
 
-    echo "Starting benchmarks..."
-    run_benchmarks "$tests"
-    echo "Benchmarks completed!"
+    if [ "$host" = "$database" ]; then
+        echo "Loading database - Type: $type - Config: $config - Benchmark: $benchmark"
+        echo "Starting database..."
+        start_cluster
+        echo "The server has started!"
 
-    set_worker_ready "$host" "$worker_tests_completed"
-fi
+        echo "Build databases..."
+        build_db $type $config $benchmark
+        echo "Database was built!"
 
+        echo "Setting load as completed..."
+        set_worker_ready "$database" "$load_completion"
+        echo $run > $run_file
+        echo "Load completed!"
 
-if [ "$host" = "$database" ]; then
-    wait_all_workers "$worker_tests_completed" "$wokers_count"
+    else
+        echo "Waiting for load to be completed..."
+        wait_worker "$database" "$load_completion"
 
-    ./stop.sh
+        echo "Starting benchmarks..."
+        run_benchmark "$type" "$config" "$benchmark"
+        echo "Benchmarks completed!"
 
-    ./plot_data.py "${run_dir}"
-fi
+        set_worker_ready "$host" "$worker_tests_completed"
+    fi
+
+    if [ "$host" = "$database" ]; then
+        wait_all_workers "$worker_tests_completed" "$worker_count"
+
+        ./stop.sh
+
+        ./plot_data.py -d "${run_dir}"
+
+        echo $run > $run_file
+        echo "Run file updated!"
+    fi
+
+done < "$test_file"

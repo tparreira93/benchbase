@@ -1,59 +1,12 @@
 #!/bin/python3
-from email.mime import base
-from encodings import normalize_encoding
-import glob
-from heapq import merge
-from importlib.resources import path
 from math import floor
-import sys
+from operator import truediv
 import os
-from pathlib import Path
-from tkinter import W
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 import re
 import argparse
-
-
-def rename(df):
-    df.rename(columns={
-        "Time (seconds)": "Time (sec)",
-        "Throughput (requests/second)": "Requests (sec)",
-        "Average Latency (millisecond)": "Avg. Latency (ms)",
-        "99th Percentile Latency (millisecond)": "P99 Latency (ms)"
-    }, inplace=True)
-
-
-def find_plotable_data(csv_pattern):
-    files = []
-    for arg in sys.argv[1:-1]:
-        csv_files = [f for f in os.listdir(arg) if f.endswith(csv_pattern + ".csv")]
-        for f in csv_files:
-            p = Path(os.path.join(arg, f))
-            files.append((str(p.parent.parent.name), str(p)))
-
-    return files
-
-
-def create_plot(column, files, title, ax=None):
-    if len(files) == 0:
-        return
-
-    if ax == None:
-        ax = plt.gca()
-    for driver, file in files:
-        colname = driver.upper()
-        df = pd.read_csv(file)
-        rename(df)
-        df = df.rename(columns={
-            column: colname
-        }, inplace=False)
-
-        ax.set_title(title)
-        a = df.plot(kind='line', x='Time (sec)', y=colname, ax=ax)
-        a.set_xlabel("Time (sec)")
-        a.set_ylabel(column)
 
 
 def create_plot_df(df, type, data, title, x_col, y_col, ax=None):
@@ -67,21 +20,29 @@ def create_plot_df(df, type, data, title, x_col, y_col, ax=None):
     a.set_xlabel(x_col)
     a.set_ylabel(y_col)
 
+def is_machine_result_folder(machine):
+    if os.path.isdir(machine):
+        for f in os.listdir(machine):
+            if f.endswith("raw.csv"):
+                return True
+
+    return False
 
 def test_machines(test_name):
     csv_files = []
     for machine in os.listdir(test_name):
-        machine = test_name + "/" + machine
-        if os.path.isdir(machine):
-            csv_files.append(machine + "/" + [f for f in os.listdir(machine) if f.endswith("raw.csv")][0])
+        machine = os.path.join(test_name, machine)
+        if is_machine_result_folder(machine):
+            csv_files.append(os.path.join(machine, [f for f in os.listdir(machine) if f.endswith("raw.csv")][0]))
 
     return csv_files
 
 
-def test_files(test_type):
+def test_files(base_dir, test_type):
+    dir = os.path.join(base_dir, test_type)
     tests = dict()
-    for t in os.listdir(test_type):
-        csv = test_machines(os.path.join(test_type, t))
+    for t in os.listdir(dir):
+        csv = test_machines(os.path.join(dir, t))
         tests[t] = csv
 
     return tests
@@ -159,11 +120,11 @@ def create_title_name(file_name: str):
 def run(args):
     base_dir = args.directory
 
-    base_tests = test_files(os.path.join(base_dir, "base"))
-    lsd_tests = test_files(os.path.join(base_dir, "lsd"))
+    base_tests = test_files(base_dir, "base")
+    lsd_tests = test_files(base_dir, "lsd")
     window = 5
     plt.rcParams.update({
-        "text.usetex": True,
+        "text.usetex": False,
         "font.family": "sans-serif"
     })
     for item in base_tests:

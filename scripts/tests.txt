@@ -1,0 +1,4 @@
+base psql_Sca1_Ter10_Dur120_NO100 tpcc
+lsd psql_Sca1_Ter10_Dur120_NO100 tpcc_lsd
+base psql_Sca10_Ter10_Dur120_NO100 tpcc
+lsd psql_Sca10_Ter10_Dur120_NO100 tpcc_lsd

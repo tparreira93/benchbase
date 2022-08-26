@@ -3,7 +3,7 @@
 user="tparreira"
 host=$(hostname)
 
-JAVA_OPTIONS="-Xms2g -Xmx2g"
+JAVA_OPTIONS="-Xms2g -Xmx2g -Djava.util.logging.config.file=logging.properties"
 
 source "/home/jlourenco/tparreira/sync_nodes.sh"
 
@@ -55,5 +55,5 @@ function benchmark_db() {
 
     popd
     
-    cp -r "$save_config_dir/" "$save_to/"
+    cp -r "$save_config_dir/." "$save_to/"
 }
