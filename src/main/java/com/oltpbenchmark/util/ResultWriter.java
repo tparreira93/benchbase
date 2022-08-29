@@ -209,11 +209,11 @@ public class ResultWriter {
                 "Latency (microseconds)",
                 "Worker Id (start number)",
                 "Phase Id (index in config file)",
-                "Error",
-                "Aborted",
-                "Retries",
-                "Success",
-                "Window"
+                "error",
+                "aborted",
+                "retries",
+                "success",
+                "window"
         };
         out.println(StringUtil.join(",", header));
         for (LatencyRecord.Sample s : results.getLatencySamples()) {

@@ -64,33 +64,56 @@ def enhance_data(df: pd.DataFrame):
     results["result"] = 1
     results["time_bucket"] = results.apply(lambda row: floor(row["time"]), axis=1)
     results["latency"] = results["Latency (microseconds)"].apply((lambda row: row / 1000))
+    results["window"] = results["window"].apply((lambda row: row / 1000))
+    results["retries"] = results["retries"].apply((lambda row: row if row > 0 else row))
+    results["failed"] = results["success"].apply((lambda row: 0 if row == 1 else 1))
 
     return results
 
 
-def compute_statistics(df: pd.DataFrame, window=1):
-    extended_stats = enhance_data(df)
-    stats = extended_stats[["time_bucket", "time", "result", "latency"]]
+def compute_statistics(extended_stats: pd.DataFrame, window=1):
+    stats = extended_stats[["time_bucket", "time", "result", "latency", "window", "success", "failed", "error"]]
     max_time = extended_stats["time"].max()
 
-    p99 = []
     throughput = []
+    latency = []
+    transaction_window = []
+    error_rate = []
     buckets = range(floor(max_time))
 
     for i in buckets:
         s = max(i - window, 0)
 
-        bucket_data: pd.DataFrame = stats.loc[(s <= stats["time_bucket"]) & (stats["time_bucket"] <= i)]
+        data_buckets = stats.loc[(s <= stats["time_bucket"]) & (stats["time_bucket"] <= i)]
+        failed_requests: pd.DataFrame = data_buckets.loc[(stats["success"] == 0)]
 
-        requests = bucket_data.groupby(by="time_bucket").sum()
+        requests = data_buckets.groupby(by="time_bucket").sum()
         requests = requests[["result"]].mean()[0]
         tpmC = (60 * requests) / window
-        throughput.append(tpmC)
-        p99.append(bucket_data[["latency"]].quantile(0.99)[0])
 
-    p99 = pd.DataFrame({'time_bucket': buckets, 'latency': p99})
+        requests = failed_requests.groupby(by="time_bucket").sum()
+        requests = requests[["failed"]].mean()[0]
+        failedM = (60 * requests) / window
+        
+        errors = data_buckets[["error"]].mean()[0]
+        errorM = (60 * errors) / window
+        
+        p99 = data_buckets[["latency"]].quantile(0.99)[0]
+        commit_duration = data_buckets[["window"]].quantile(0.99)[0]
+
+        throughput.append(tpmC)
+        latency.append(p99)
+        transaction_window.append(commit_duration)
+        error_rate.append(errorM)
+
     throughput = pd.DataFrame({'time_bucket': buckets, 'throughput': throughput})
-    stats = throughput.join(p99.set_index("time_bucket"), on="time_bucket")
+    latency = pd.DataFrame({'time_bucket': buckets, 'latency': p99})
+    transaction_window = pd.DataFrame({'time_bucket': buckets, 'window': transaction_window})
+    error_rate = pd.DataFrame({'time_bucket': buckets, 'error': error_rate})
+
+    stats = throughput.join(latency.set_index("time_bucket"), on="time_bucket")
+    stats = stats.join(transaction_window.set_index("time_bucket"), on="time_bucket")
+    stats = stats.join(error_rate.set_index("time_bucket"), on="time_bucket")
 
     return stats
 
@@ -117,8 +140,20 @@ def create_title_name(file_name: str):
     return str.format("New order - {} and {}", terminals_str, scale_str)
 
 
+def plot_data(base_results, lsd_results, y_col, y_desc, title, base_dir, file_name):
+        fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
+
+        create_plot_df(base_results, "base", y_col, title, "Time (sec)", y_desc, axes)
+        create_plot_df(lsd_results, "lsd", y_col, title, "Time (sec)", y_desc, axes)
+
+        plt.savefig(os.path.join(base_dir, file_name + ".svg"))
+        plt.savefig(os.path.join(base_dir, file_name + ".png"))
+        plt.savefig(os.path.join(base_dir, file_name + ".pdf"))
+
+
 def run(args):
-    base_dir = args.directory
+    # base_dir = args.directory
+    base_dir = "tpcc/fake-run"
 
     base_tests = test_files(base_dir, "base")
     lsd_tests = test_files(base_dir, "lsd")
@@ -132,26 +167,16 @@ def run(args):
         lsd_results = join_files(lsd_tests[item])
         base_results = join_files(base_tests[item])
 
+        lsd_results = enhance_data(lsd_results)
+        base_results = enhance_data(base_results)
+
         lsd_results = compute_statistics(lsd_results, window=window)
-        base_resuts = compute_statistics(base_results, window=window)
+        base_results = compute_statistics(base_results, window=window)
 
-        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 3.5))
-        create_plot_df(lsd_results, "lsd", "throughput", "Requests (" + str(window) + " sec. rolling window)",
-                       "Time (sec)", "tpmC", axes[0])
-        create_plot_df(lsd_results, "lsd", "latency", "P99th Latency (" + str(window) + " sec. rolling window)",
-                       "Time (sec)",
-                       "Latency (ms)", axes[1])
-        create_plot_df(base_resuts, "base", "throughput", "Requests (" + str(window) + " sec. rolling window)",
-                       "Time (sec)", "tpmC", axes[0])
-        create_plot_df(base_resuts, "base", "latency", "P99th Latency (" + str(window) + " sec. rolling window)",
-                       "Time (sec)",
-                       "Latency (ms)", axes[1])
-
-        # plt.show()
-        plt.savefig(os.path.join(base_dir, item + ".svg"))
-        plt.savefig(os.path.join(base_dir, item + ".png"))
-        plt.savefig(os.path.join(base_dir, item + ".pdf"))
-
+        plot_data(base_results, lsd_results, "throughput", "tpmC", "Requests (" + str(window) + " sec. rolling window)", base_dir, "throughput_" + item)
+        plot_data(base_results, lsd_results, "latency", "Latency (ms)", "Latency (" + str(window) + " sec. rolling window)", base_dir, "latency_" + item)
+        plot_data(base_results, lsd_results, "window", "Window (ms)", "Window (" + str(window) + " sec. rolling window)", base_dir, "window_" + item)
+        plot_data(base_results, lsd_results, "error", "Errors", "Error rate (" + str(window) + " sec. rolling window)", base_dir, "error_" + item)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
