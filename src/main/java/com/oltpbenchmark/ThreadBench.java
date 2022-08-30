@@ -292,14 +292,17 @@ public class ThreadBench implements Thread.UncaughtExceptionHandler {
                     samples.add(sample);
                 }
             }
+            int maxRetries = workConfs.get(0).getMaxRetries();
             Collections.sort(samples);
 
             // Compute stats on all the latencies
             int[] latencies = new int[samples.size()];
+            int[] commitWindow = new int[samples.size()];
             for (int i = 0; i < samples.size(); ++i) {
                 latencies[i] = samples.get(i).getLatencyMicrosecond();
+                commitWindow[i] = samples.get(i).getWindowLatency();
             }
-            DistributionStatistics stats = DistributionStatistics.computeStatistics(latencies);
+            DistributionStatistics stats = DistributionStatistics.computeStatistics(latencies, commitWindow, (int) samples.stream().filter(s -> s.getFailed() == 1).count());
 
             Results results = new Results(measureEnd - start, requests, stats, samples);
 
@@ -416,6 +419,8 @@ public class ThreadBench implements Thread.UncaughtExceptionHandler {
 
             // Collect all samples in the time window
             ArrayList<Integer> latencies = new ArrayList<>();
+            ArrayList<Integer> window = new ArrayList<>();
+            int failed = 0;
             long endNanoseconds = nextStartNanosecond + (windowSizeSeconds * 1000000000L);
             while (sample != null && sample.getStartNanosecond() < endNanoseconds) {
 
@@ -424,6 +429,8 @@ public class ThreadBench implements Thread.UncaughtExceptionHandler {
                 // set, only this specific transaction
                 if (txType.equals(TransactionType.INVALID) || txType.getId() == sample.getTransactionType()) {
                     latencies.add(sample.getLatencyMicrosecond());
+                    window.add(sample.getWindowLatency());
+                    failed = sample.getFailed();;
                 }
 
                 if (samples.hasNext()) {
@@ -438,11 +445,13 @@ public class ThreadBench implements Thread.UncaughtExceptionHandler {
             nextStartNanosecond = endNanoseconds;
 
             int[] l = new int[latencies.size()];
+            int[] w = new int[latencies.size()];
             for (int i = 0; i < l.length; ++i) {
                 l[i] = latencies.get(i);
+                w[i] = latencies.get(i);
             }
 
-            next = DistributionStatistics.computeStatistics(l);
+            next = DistributionStatistics.computeStatistics(l, w, failed);
         }
 
         @Override

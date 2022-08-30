@@ -583,6 +583,12 @@ public class DBWorkload {
             rw.writeSamples(ps);
         }
 
+        String customSampleFileName = baseFileName + ".custom.csv";
+        try (PrintStream ps = new PrintStream(FileUtil.joinPath(outputDirectory, customSampleFileName))) {
+            LOG.info("Output samples into file: {}", customSampleFileName);
+            rw.writeCustomSamples(ps);
+        }
+
         String summaryFileName = baseFileName + ".summary.json";
         try (PrintStream ps = new PrintStream(FileUtil.joinPath(outputDirectory, summaryFileName))) {
             LOG.info("Output summary data into file: {}", summaryFileName);

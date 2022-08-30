@@ -18,6 +18,7 @@
 
 package com.oltpbenchmark;
 
+import kotlin.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,25 +45,87 @@ public class DistributionStatistics {
     private final long[] percentiles;
     private final double average;
     private final double standardDeviation;
+    private final int failed;
+    private final long[] windowPercentiles;
 
-    public DistributionStatistics(int count, long[] percentiles, double average, double standardDeviation) {
+//    public DistributionStatistics(int count, long[] percentiles, double average, double standardDeviation) {
+//        this.count = count;
+//        this.percentiles = Arrays.copyOfRange(percentiles, 0, PERCENTILES.length);
+//        this.average = average;
+//        this.standardDeviation = standardDeviation;
+//    }
+    public DistributionStatistics(int count, long[] percentiles, double average, double standardDeviation, int failed, long[] windowPercentiles) {
         this.count = count;
         this.percentiles = Arrays.copyOfRange(percentiles, 0, PERCENTILES.length);
         this.average = average;
         this.standardDeviation = standardDeviation;
+        this.failed = failed;
+        this.windowPercentiles = windowPercentiles;
     }
 
-    /**
-     * Computes distribution statistics over values. WARNING: This will sort
-     * values.
-     */
-    public static DistributionStatistics computeStatistics(int[] valuesAsMicroseconds) {
+//    /**
+//     * Computes distribution statistics over values. WARNING: This will sort
+//     * values.
+//     */
+//    public static DistributionStatistics computeStatistics(int[] valuesAsMicroseconds) {
+//        if (valuesAsMicroseconds.length == 0) {
+//            long[] percentiles = new long[PERCENTILES.length];
+//            Arrays.fill(percentiles, -1);
+//            return new DistributionStatistics(0, percentiles, -1, -1);
+//        }
+//
+//        Arrays.sort(valuesAsMicroseconds);
+//
+//        double sum = 0;
+//        for (int value1 : valuesAsMicroseconds) {
+//            sum += value1;
+//        }
+//        double average = sum / valuesAsMicroseconds.length;
+//
+//        double sumDiffsSquared = 0;
+//        for (int value : valuesAsMicroseconds) {
+//            double v = value - average;
+//            sumDiffsSquared += v * v;
+//        }
+//        double standardDeviation = 0;
+//        if (valuesAsMicroseconds.length > 1) {
+//            standardDeviation = Math
+//                    .sqrt(sumDiffsSquared / (valuesAsMicroseconds.length - 1));
+//        }
+//
+//        // NOTE: NIST recommends interpolating. This just selects the closest
+//        // value, which is described as another common technique.
+//        // http://www.itl.nist.gov/div898/handbook/prc/section2/prc252.htm
+//        long[] percentiles = new long[PERCENTILES.length];
+//        for (int i = 0; i < percentiles.length; ++i) {
+//            int index = (int) (PERCENTILES[i] * valuesAsMicroseconds.length);
+//            if (index == valuesAsMicroseconds.length) {
+//                index = valuesAsMicroseconds.length - 1;
+//            }
+//            percentiles[i] = valuesAsMicroseconds[index];
+//        }
+//
+//        return new DistributionStatistics(valuesAsMicroseconds.length, percentiles, average, standardDeviation);
+//    }
+
+
+    public static DistributionStatistics computeStatistics(int[] valuesAsMicroseconds, int[] commitWindow, int failed) {
         if (valuesAsMicroseconds.length == 0) {
             long[] percentiles = new long[PERCENTILES.length];
+            long[] windowPercentiles = new long[PERCENTILES.length];
             Arrays.fill(percentiles, -1);
-            return new DistributionStatistics(0, percentiles, -1, -1);
+            Arrays.fill(windowPercentiles, -1);
+            return new DistributionStatistics(0, percentiles, -1, -1, failed, windowPercentiles);
         }
 
+        Triple<long[], Double, Double> latency = computePercentiles(valuesAsMicroseconds);
+        Triple<long[], Double, Double> window = computePercentiles(commitWindow);
+
+
+        return new DistributionStatistics(valuesAsMicroseconds.length, latency.getFirst(), latency.getSecond(), latency.getThird(), failed, window.getFirst());
+    }
+
+    public static Triple<long[], Double, Double> computePercentiles(int[] valuesAsMicroseconds) {
         Arrays.sort(valuesAsMicroseconds);
 
         double sum = 0;
@@ -94,8 +157,9 @@ public class DistributionStatistics {
             percentiles[i] = valuesAsMicroseconds[index];
         }
 
-        return new DistributionStatistics(valuesAsMicroseconds.length, percentiles, average, standardDeviation);
+        return new Triple<>(percentiles, average, standardDeviation);
     }
+
 
     public int getCount() {
         return count;
@@ -141,6 +205,42 @@ public class DistributionStatistics {
         return percentiles[MAXIMUM];
     }
 
+    public double getWindowMinimum() {
+        return windowPercentiles[MINIMUM];
+    }
+
+    public double getWindow25thPercentile() {
+        return windowPercentiles[PERCENTILE_25TH];
+    }
+
+    public double getWindowMedian() {
+        return windowPercentiles[MEDIAN];
+    }
+
+    public double getWindow75thPercentile() {
+        return windowPercentiles[PERCENTILE_75TH];
+    }
+
+    public double getWindow90thPercentile() {
+        return windowPercentiles[PERCENTILE_90TH];
+    }
+
+    public double getWindow95thPercentile() {
+        return windowPercentiles[PERCENTILE_95TH];
+    }
+
+    public double getWindow99thPercentile() {
+        return windowPercentiles[PERCENTILE_99TH];
+    }
+
+    public double getWindowMaximum() {
+        return windowPercentiles[MAXIMUM];
+    }
+
+    public int getSuccess() {
+        return count - failed;
+    }
+
     @Override
     public String toString() {
         return "in milliseconds [min=" + TimeUnit.MICROSECONDS.toMillis((long) getMinimum()) + ", "
@@ -166,5 +266,9 @@ public class DistributionStatistics {
         distMap.put("99th Percentile Latency (microseconds)", (int) get99thPercentile());
         distMap.put("Maximum Latency (microseconds)", (int) getMaximum());
         return distMap;
+    }
+
+    public int getFailed() {
+        return failed;
     }
 }

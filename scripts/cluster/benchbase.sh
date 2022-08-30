@@ -1,59 +1,38 @@
 #!/usr/bin/bash
 
-user="tparreira"
-host=$(hostname)
-
 JAVA_OPTIONS="-Xms2g -Xmx2g -Djava.util.logging.config.file=logging.properties"
 
-source "/home/jlourenco/tparreira/sync_nodes.sh"
-
 function build_db() {
-    local config
+    local benchbase_dir
+    local config_file
     local benchmark
-    local save_dir
 
-    type=$1
-    config=$2
+    benchbase_dir=$1
+    config_file=$2
     benchmark=$3
 
-    random_place=$(cat /proc/sys/kernel/random/uuid)
-    save_dir="/tmp/$user/$random_place"
-
-    pushd "/home/jlourenco/$user/benchbase-postgres"
-
-        java $JAVA_OPTIONS -jar benchbase.jar -c "tpcc/$type/$config.xml" -d "$save_dir/$type/$config" --create=true --load=true --execute=false -b "$benchmark"
+    pushd "$benchbase_dir"
+        
+        java $JAVA_OPTIONS -jar "benchbase.jar" -c "$config_file" --create=true --load=true --execute=false -b "$benchmark"
 
     popd
 }
 
-# test type - lsd or base
-# config - config file
-# benchmark - tpcc or tpcc_lsd
-# save location
 function benchmark_db() {
-    local config
+    local benchbase_dir
+    local config_file
     local benchmark
-    local config_dir
-    local save_dir
+    local save_config_dir
 
-    type=$1
-    config=$2
+    benchbase_dir=$1
+    config_file=$2
     benchmark=$3
-    save_to=$4
+    save_config_dir=$4
     
-    random_place=$(cat /proc/sys/kernel/random/uuid)
-    config_dir="/home/jlourenco/$user/benchbase-postgres/tpcc"
-
-    [ ! -d "$save_to" ] && mkdir -p "$save_to"
-
-    save_config_dir="/tmp/$user/$random_place/$type/$config"
-    [ ! -d "$save_config_dir" ] && mkdir -p "$save_config_dir"
-    
-    pushd "/home/jlourenco/$user/benchbase-postgres"
+    pushd "$benchbase_dir"
         
-        java $JAVA_OPTIONS -jar benchbase.jar -c "$config_dir/$type/$config.xml" -d "$save_config_dir" --create=false --load=false --execute=true -b "$benchmark"
+        java $JAVA_OPTIONS -jar "benchbase.jar" -c "$config_file" -d "$save_config_dir" --create=false --load=false --execute=true -b "$benchmark"
 
     popd
-    
-    cp -r "$save_config_dir/." "$save_to/"
+
 }

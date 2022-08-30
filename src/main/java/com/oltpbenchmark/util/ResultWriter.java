@@ -158,6 +158,36 @@ public class ResultWriter {
         writeSamples(1, out, TransactionType.INVALID);
     }
 
+    public void writeCustomSamples(PrintStream out) {
+        String[] header = {
+                "time_bucket",
+                "throughput",
+                "throughput_sec",
+                "tpmC",
+                "latency",
+                "window",
+                "success",
+                "failed"
+        };
+        out.println(StringUtil.join(",", header));
+        int windowSizeSeconds = 1;
+        int i = 0;
+        for (DistributionStatistics s : new ThreadBench.TimeBucketIterable(results.getLatencySamples(), windowSizeSeconds, TransactionType.INVALID)) {
+            String[] row = {
+                    Integer.toString(i * windowSizeSeconds),
+                    Integer.toString(s.getCount()),
+                    String.format(Locale.ROOT, "%.3f", (double)s.getCount() / windowSizeSeconds),
+                    String.format(Locale.ROOT, "%.3f", (double)s.getCount()),
+                    Integer.toString((int) s.get99thPercentile()),
+                    Integer.toString((int) s.getWindow99thPercentile()),
+                    Integer.toString(s.getSuccess()),
+                    Integer.toString(s.getFailed())
+            };
+            out.println(StringUtil.join(",", row));
+            i += 1;
+        }
+    }
+
     public void writeSamples(int windowSizeSeconds, PrintStream out, TransactionType txType) {
         String[] header = {
                 "Time (seconds)",
@@ -171,15 +201,23 @@ public class ResultWriter {
                 "90th Percentile Latency (microseconds)",
                 "95th Percentile Latency (microseconds)",
                 "99th Percentile Latency (microseconds)",
-                "Maximum Latency (microseconds)"
+                "Maximum Latency (microseconds)",
+                "success",
+                "failed",
+                "window",
+                "window median",
+                "window average",
+                "window 75",
+                "window 90",
+                "window 95"
         };
         out.println(StringUtil.join(",", header));
         int i = 0;
         for (DistributionStatistics s : new ThreadBench.TimeBucketIterable(results.getLatencySamples(), windowSizeSeconds, txType)) {
-            out.printf("%d,%d,%.3f,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+            out.printf("%d,%d,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
                     i * windowSizeSeconds,
                     s.getCount(),
-                    (double) s.getCount() / windowSizeSeconds,
+                    String.format(Locale.ROOT, "%.3f", (double) s.getCount() / windowSizeSeconds),
                     (int) s.getMinimum(),
                     (int) s.get25thPercentile(),
                     (int) s.getMedian(),
@@ -188,7 +226,16 @@ public class ResultWriter {
                     (int) s.get90thPercentile(),
                     (int) s.get95thPercentile(),
                     (int) s.get99thPercentile(),
-                    (int) s.getMaximum());
+                    (int) s.getMaximum(),
+                    (int) s.getSuccess(),
+                    (int) s.getFailed(),
+                    (int) s.getWindow99thPercentile(),
+                    (int) s.getWindowMedian(),
+                    (int) s.getAverage(),
+                    (int) s.getWindow75thPercentile(),
+                    (int) s.getWindow90thPercentile(),
+                    (int) s.getWindow95thPercentile()
+            );
             i += 1;
         }
     }

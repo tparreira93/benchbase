@@ -301,7 +301,13 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         // after the timer went off.
                         Phase postPhase = workloadState.getCurrentPhase();
                         if (preState == MEASURE && postPhase.getId() == prePhase.getId()) {
-                            latencies.addLatency(transactionType.getId(), start, end, this.id, prePhase.getId(), results.success, results.retryCount, results.abort, results.error, results.commitLatency, lsd);
+                            int failed = 0;
+                            if (results.success != 1) {
+                                if (results.error > 0 || results.retryCount == configuration.getMaxRetries()) {
+                                    failed = 1;
+                                }
+                            }
+                            latencies.addLatency(transactionType.getId(), start, end, this.id, prePhase.getId(), results.success, results.retryCount, results.abort, results.error, results.commitLatency, lsd, failed);
                             intervalRequests.incrementAndGet();
                         }
                         if (prePhase.isLatencyRun()) {

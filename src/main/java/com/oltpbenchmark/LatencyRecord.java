@@ -49,7 +49,7 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
 
     }
 
-    public void addLatency(int transType, long startNanosecond, long endNanosecond, int workerId, int phaseId, int success, int retries, int abort, int error, int commitLatency, boolean isLsd) {
+    public void addLatency(int transType, long startNanosecond, long endNanosecond, int workerId, int phaseId, int success, int retries, int abort, int error, int commitLatency, boolean isLsd, int failed) {
         if (nextIndex == ALLOC_SIZE) {
             allocateChunk();
         }
@@ -60,7 +60,7 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
         int latencyMicroseconds = (int) ((endNanosecond - startNanosecond + 500) / 1000);
 
 
-        chunk[nextIndex] = new Sample(transType, startOffsetNanosecond, latencyMicroseconds, workerId, phaseId, success, retries, abort, error, isLsd ? commitLatency : latencyMicroseconds);
+        chunk[nextIndex] = new Sample(transType, startOffsetNanosecond, latencyMicroseconds, workerId, phaseId, success, retries, abort, error, isLsd ? commitLatency : latencyMicroseconds, failed);
         ++nextIndex;
 
         lastNanosecond += startOffsetNanosecond;
@@ -97,8 +97,9 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
         private final int retries;
         private final int abort;
         private final int error;
+        private final int failed;
 
-        public Sample(int transactionType, long startNanosecond, int latencyMicrosecond, int workerId, int phaseId, int success, int retries, int abort, int error, int windowLatency) {
+        public Sample(int transactionType, long startNanosecond, int latencyMicrosecond, int workerId, int phaseId, int success, int retries, int abort, int error, int windowLatency, int failed) {
             this.transactionType = transactionType;
             this.startNanosecond = startNanosecond;
             this.latencyMicrosecond = latencyMicrosecond;
@@ -109,6 +110,7 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
             this.abort = abort;
             this.error = error;
             this.windowLatency = windowLatency;
+            this.failed = failed;
         }
 
         public int getTransactionType() {
@@ -164,6 +166,10 @@ public class LatencyRecord implements Iterable<LatencyRecord.Sample> {
 
         public int getWindowLatency() {
             return windowLatency;
+        }
+
+        public int getFailed() {
+            return failed;
         }
     }
 
