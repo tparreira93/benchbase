@@ -239,3 +239,7 @@ The BibTeX is provided below for convenience.
   url = {http://www.vldb.org/pvldb/vol7/p277-difallah.pdf},
  }
  ```
+
+## Acknowledgments
+
+The work on this repository fork was partially funded by the Portuguese FCT-MEC project HiPSTr (High-performance Software Transactions — PTDC/CCI-COM/32456/2017)&LISBOA-01-0145-FEDER-032456).
