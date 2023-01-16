@@ -1,4 +1,5 @@
 #!/bin/python3
+from cProfile import label
 from math import floor
 from operator import truediv
 import os
@@ -14,13 +15,17 @@ def create_plot_df(df, type, data, title, x_col, y_col, ax=None):
         "time_bucket": x_col,
         data: type.upper()
     }, inplace=False)
-
+    avg = df[[type.upper()]].mean()[0]
+    x_max = df[[x_col]].max()[0]
     color_dict = {'BASE': '#FF7F0E', 'LSD': '#1F77B4'}
 
     ax.set_title(title)
+    ax.axhline(y=avg, xmin=0, xmax=x_max, c=color_dict.get(type.upper()), zorder=0, linestyle='--')
+    ax.text(x_max + 6.25, avg, type.upper() + " avg.", color="black", va="center", fontsize=22)
     a = df.plot(kind='line', x="Time (sec)", y=type.upper(), ax=ax, color=color_dict.get(type.upper()))
     a.set_xlabel(x_col)
     a.set_ylabel(y_col)
+    # a.set_xlim((0, x_max))
 
 
 def is_machine_result_folder(machine, pattern):
@@ -85,7 +90,9 @@ def compute_statistics(extended_stats: pd.DataFrame, window=1):
 
     throughput = []
     latency = []
+    latency_avg = []
     transaction_window = []
+    transaction_window_avg = []
     error_rate = []
     failed_rate = []
     buckets = range(floor(max_time))
@@ -103,25 +110,33 @@ def compute_statistics(extended_stats: pd.DataFrame, window=1):
         failed = failed_requests.groupby(by="time_bucket").sum()[["failed"]].mean()[0]
 
         errors = data_buckets[["error"]].mean()[0]
-        errorM = (60 * errors) / window
+        errorM = errors / window
 
         p99 = data_buckets[["latency"]].quantile(0.99)[0]
+        ms_avg = data_buckets[["latency"]].mean()[0]
         commit_duration = data_buckets[["window"]].quantile(0.99)[0]
+        commit_duration_avg = data_buckets[["window"]].mean()[0]
 
         throughput.append(tpmC)
         latency.append(p99)
+        latency_avg.append(ms_avg)
         transaction_window.append(commit_duration)
+        transaction_window_avg.append(commit_duration_avg)
         error_rate.append(errorM)
         failed_rate.append(failed)
 
-    throughput = pd.DataFrame({'time_bucket': buckets, 'throughput': throughput})
-    latency = pd.DataFrame({'time_bucket': buckets, 'latency': latency})
-    transaction_window = pd.DataFrame({'time_bucket': buckets, 'window': transaction_window})
+    throughput = pd.DataFrame({'time_bucket': buckets, 'tpmC': throughput})
+    latency = pd.DataFrame({'time_bucket': buckets, 'latency_99': latency})
+    latency_avg = pd.DataFrame({'time_bucket': buckets, 'latency_avg': latency_avg})
+    transaction_window = pd.DataFrame({'time_bucket': buckets, 'window_99': transaction_window})
+    transaction_window_avg = pd.DataFrame({'time_bucket': buckets, 'window_avg': transaction_window_avg})
     error_rate = pd.DataFrame({'time_bucket': buckets, 'error': error_rate})
     failed_rate = pd.DataFrame({'time_bucket': buckets, 'failed': failed_rate})
 
     stats = throughput.join(latency.set_index("time_bucket"), on="time_bucket")
+    stats = stats.join(latency_avg.set_index("time_bucket"), on="time_bucket")
     stats = stats.join(transaction_window.set_index("time_bucket"), on="time_bucket")
+    stats = stats.join(transaction_window_avg.set_index("time_bucket"), on="time_bucket")
     stats = stats.join(error_rate.set_index("time_bucket"), on="time_bucket")
     stats = stats.join(failed_rate.set_index("time_bucket"), on="time_bucket")
 
@@ -139,7 +154,9 @@ def compute_sample_stats(samples: pd.DataFrame):
 
     throughput = []
     latency = []
+    latency_avg = []
     transaction_window = []
+    transaction_window_avg = []
     failed_rate = []
     max_time = stats["time_bucket"].max()
     buckets = range(floor(max_time))
@@ -150,21 +167,29 @@ def compute_sample_stats(samples: pd.DataFrame):
         tpmC = data.sum()["tpmC"]
         failed = data.sum()["failed"]
         window = data.quantile(0.99)["window"]
+        window_avg = data.quantile(0.99)["window"]
         p99 = data.quantile(0.99)["latency"]
+        ms_avg = data.mean()["latency"]
 
 
         throughput.append(tpmC)
         latency.append(p99)
+        latency_avg.append(ms_avg)
         transaction_window.append(window)
+        transaction_window_avg.append(window_avg)
         failed_rate.append(failed)
 
-    throughput = pd.DataFrame({'time_bucket': buckets, 'throughput': throughput})
-    latency = pd.DataFrame({'time_bucket': buckets, 'latency': latency})
-    transaction_window = pd.DataFrame({'time_bucket': buckets, 'window': transaction_window})
+    throughput = pd.DataFrame({'time_bucket': buckets, 'tpmC': throughput})
+    latency = pd.DataFrame({'time_bucket': buckets, 'latency_99': latency})
+    latency_avg = pd.DataFrame({'time_bucket': buckets, 'latency_avg': latency_avg})
+    transaction_window = pd.DataFrame({'time_bucket': buckets, 'window_99': transaction_window})
+    transaction_window_avg = pd.DataFrame({'time_bucket': buckets, 'window_avg': transaction_window_avg})
     failed_rate = pd.DataFrame({'time_bucket': buckets, 'failed': failed_rate})
 
     stats = throughput.join(latency.set_index("time_bucket"), on="time_bucket")
+    stats = stats.join(latency_avg.set_index("time_bucket"), on="time_bucket")
     stats = stats.join(transaction_window.set_index("time_bucket"), on="time_bucket")
+    stats = stats.join(transaction_window_avg.set_index("time_bucket"), on="time_bucket")
     stats = stats.join(failed_rate.set_index("time_bucket"), on="time_bucket")
     return stats
 
@@ -194,16 +219,23 @@ def create_title_name(file_name: str):
 def create_file_name(file_name: str, window=None):
     scale = int(get_value_of_match(r".*Sca(\d+)", file_name))
     terminals = int(get_value_of_match(r".*Ter(\d+)", file_name))
+    base_name = "all_"
+    if "NOPA" in file_name:
+        base_name = "without_payment"
+    elif "NO" in file_name:
+        base_name = "new_order_"
+    elif "PA" in file_name:
+        base_name = "payment_"
     window_str = ""
 
-    if window is None:
+    if not window is None:
         window_str = "_" + str(window) + "_sec"
 
     if scale == 1 and terminals == 10:
-        return "high_contention" + window_str
+        return base_name + "high_contention" + window_str
 
     if scale == 10 and terminals == 10:
-        return "low_contention" + window_str
+        return base_name + "low_contention" + window_str
 
     # if (scale == 10 and terminals == 10):
     #     return "mid_contention"
@@ -215,30 +247,53 @@ def create_file_name(file_name: str, window=None):
 
 
 def plot_data(base_results, lsd_results, y_col, y_desc, title, base_dir, file_name):
-        fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
-
+        fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(16, 12))
         create_plot_df(lsd_results, "lsd", y_col, title, "Time (sec)", y_desc, axes)
         create_plot_df(base_results, "base", y_col, title, "Time (sec)", y_desc, axes)
 
         # plt.savefig(os.path.join(base_dir, file_name + ".svg"))
         plt.savefig(os.path.join(base_dir, file_name + ".png"))
-        # plt.savefig(os.path.join(base_dir, file_name + ".pdf"))
+        plt.savefig(os.path.join(base_dir, file_name + ".pdf"))
 
         plt.close(fig)
+
+
+def plot_computation(base_results, lsd_results, window, base_dir, outfile):
+    plot_data(base_results, lsd_results, "tpmC", "tpmC", "tpmC", base_dir,
+              outfile + "_throughput")
+    plot_data(base_results, lsd_results, "latency_99", "Latency (ms)",
+              "Latency percentile 99", base_dir, outfile + "_latency_99")
+    plot_data(base_results, lsd_results, "latency_avg", "Latency (ms)",
+              "Average latency", base_dir, outfile + "_latency_avg")
+    plot_data(base_results, lsd_results, "window_99", "Window (ms)",
+              "Window percentile 99", base_dir, outfile + "_window_99")
+    plot_data(base_results, lsd_results, "window_avg", "Window (ms)",
+              "Average transaction window", base_dir, outfile + "_window_avg")
+    # plot_data(base_results, lsd_results, "error", "Errors", "Error rate (" + str(window) + " sec. rolling window)", base_dir, outfile + "_error")
+    plot_data(base_results, lsd_results, "failed", "Failed", "Failures per second",
+              base_dir, outfile + "_failed")
+
+
+def plot_samples(base_results, lsd_results, base_dir, outfile):
+    plot_data(base_results, lsd_results, "tpmC", "tpmC", "Transactions per second", base_dir, outfile + "_throughput")
+    plot_data(base_results, lsd_results, "latency_99", "Latency (ms)", "Latency (P99th)", base_dir,
+              outfile + "_latency_99")
+    plot_data(base_results, lsd_results, "latency_avg", "Latency (ms)", "Latency (Average)", base_dir,
+              outfile + "_latency_avg")
+    plot_data(base_results, lsd_results, "window_99", "Window (ms)", "Window (P99th)", base_dir, outfile + "_window_99")
+    plot_data(base_results, lsd_results, "window_avg", "Window (ms)", "Window (Average)", base_dir,
+              outfile + "_window_avg")
+    plot_data(base_results, lsd_results, "failed", "Failed", "Failed", base_dir, outfile + "_failed")
 
 
 def compute(base_dir, window):
     base_tests = test_files(base_dir, "base", "raw.csv")
     lsd_tests = test_files(base_dir, "lsd", "raw.csv")
-    plt.rcParams.update({
-        "text.usetex": False,
-        "font.family": "sans-serif"
-    })
     for item in base_tests:
-        title = create_title_name(item)
-        outfile = create_file_name(item, window)
-        lsd_results = join_files(lsd_tests[item])
-        base_results = join_files(base_tests[item])
+        # title = create_title_name(item)
+        outfile = "manual_" + create_file_name(item, window)
+        lsd_results = join_files(lsd_tests[item], True)
+        base_results = join_files(base_tests[item], True)
 
         # lsd_results = enhance_data(lsd_results)
         # base_results = enhance_data(base_results)
@@ -246,23 +301,15 @@ def compute(base_dir, window):
         lsd_results = compute_statistics(lsd_results, window=window)
         base_results = compute_statistics(base_results, window=window)
 
-        plot_data(base_results, lsd_results, "tpmC", "tpmC", "Requests (" + str(window) + " sec. rolling window)", base_dir, outfile + "_throughput")
-        plot_data(base_results, lsd_results, "latency", "Latency (ms)", "Latency (P99 of " + str(window) + " sec. rolling window)", base_dir, outfile + "_latency")
-        plot_data(base_results, lsd_results, "window", "Window (ms)", "Window (" + str(window) + " sec. rolling window)", base_dir, outfile + "_window")
-        # plot_data(base_results, lsd_results, "error", "Errors", "Error rate (" + str(window) + " sec. rolling window)", base_dir, outfile + "_error")
-        plot_data(base_results, lsd_results, "failed", "Failed", "Failed rate (" + str(window) + " sec. rolling window)", base_dir, outfile + "_failed")
+        plot_computation(base_results, lsd_results, window, base_dir, outfile)
 
 
-def plot_samples(base_dir):
+def compute_samples(base_dir):
     base_tests = test_files(base_dir, "base", "samples.csv")
     lsd_tests = test_files(base_dir, "lsd", "samples.csv")
-    plt.rcParams.update({
-        "text.usetex": False,
-        "font.family": "sans-serif"
-    })
     for item in base_tests:
-        title = create_title_name(item)
-        outfile = create_file_name(item)
+        # title = create_title_name(item)
+        outfile = "sampled_" + create_file_name(item)
         lsd_results = join_files(lsd_tests[item])
         base_results = join_files(base_tests[item])
 
@@ -272,10 +319,67 @@ def plot_samples(base_dir):
         lsd_results = compute_sample_stats(lsd_results)
         base_results = compute_sample_stats(base_results)
 
-        plot_data(base_results, lsd_results, "throughput", "tpmC", "Requests", base_dir, outfile + "_throughput")
-        plot_data(base_results, lsd_results, "latency", "Latency (ms)", "Latency (P99th)", base_dir, outfile + "_latency")
-        plot_data(base_results, lsd_results, "window", "Window (ms)", "Window", base_dir, outfile + "_window")
-        plot_data(base_results, lsd_results, "failed", "Failed", "Failed", base_dir, outfile + "_failed")
+        plot_samples(base_results, lsd_results, base_dir, outfile)
+
+    return
+
+
+def compute_aggregate(directories, windows):
+    sampled_lsd = dict()
+    sampled_base = dict()
+
+    for base_dir in directories:
+        sampled_base_tests = test_files(base_dir, "base", "samples.csv")
+        sampled_lsd_tests = test_files(base_dir, "lsd", "samples.csv")
+        base_tests = test_files(base_dir, "base", "raw.csv")
+        lsd_tests = test_files(base_dir, "lsd", "raw.csv")
+
+        for item in sampled_base_tests:
+            # title = create_title_name(item)
+            outfile_sample = "sampled_" + create_file_name(item)
+            agg_outfile_sample = "agg_sampled_" + create_file_name(item)
+
+            sampled_lsd_results = compute_sample_stats(join_files(sampled_lsd_tests[item]))
+            sampled_base_results = compute_sample_stats(join_files(sampled_base_tests[item]))
+
+            if agg_outfile_sample in sampled_lsd:
+                sampled_lsd[agg_outfile_sample].append(sampled_lsd_results)
+            else:
+                sampled_lsd[agg_outfile_sample] = [sampled_lsd_results]
+
+            if agg_outfile_sample in sampled_base:
+                sampled_base[agg_outfile_sample].append(sampled_base_results)
+            else:
+                sampled_base[agg_outfile_sample] = [sampled_base_results]
+
+            plot_samples(sampled_base_results, sampled_lsd_results, base_dir, outfile_sample)
+
+        for item in base_tests:
+            for window in windows:
+                outfile_manual = "manual_" + create_file_name(item, window)
+
+                lsd_results = join_files(lsd_tests[item], True)
+                base_results = join_files(base_tests[item], True)
+
+                lsd_results = compute_statistics(lsd_results, window=window)
+                base_results = compute_statistics(base_results, window=window)
+
+                plot_computation(base_results, lsd_results, window, base_dir, outfile_manual)
+
+    agg_outfile_sample, sampled_base_list = sampled_base.popitem()
+    base = sampled_base_list[0]
+    for i in range(1, len(sampled_base_list)):
+        base = pd.concat([base, sampled_base_list[i]], ignore_index=True)
+
+    sampled_lsd_list = sampled_lsd.pop(agg_outfile_sample)
+    lsd = sampled_lsd_list[0]
+    for i in range(1, len(sampled_lsd_list)):
+        lsd = pd.concat([lsd, sampled_lsd_list[i]], ignore_index=True)
+
+    base_avg = base.groupby('time_bucket').mean().reset_index()
+    lsd_avg = lsd.groupby('time_bucket').mean().reset_index()
+
+    plot_samples(base_avg, lsd_avg, "tpcc", agg_outfile_sample)
 
     return
 
@@ -287,15 +391,21 @@ def run(args):
     #     "tpcc/run-72"
     # ]
 
-    dirs = [ "tpcc/fake-run2"]
-    # use_samples = args.use_saples
-    use_samples = True
+    dirs = [ "tpcc/run-111"]
+    use_samples = False
+
+    plt.rcParams.update({
+        "text.usetex": False,
+        "font.family": "sans-serif",
+        "font.size": 26
+    })
     for base_dir in dirs:
         if not use_samples is None and use_samples is True:
-            plot_samples(base_dir)
+            compute_samples(base_dir)
         else:
-            for window in [5, 10, 20]:
+            for window in [5]:
                 compute(base_dir, window)
+    # compute_aggregate(dirs, [5])
 
 
 if __name__ == '__main__':
@@ -311,6 +421,12 @@ if __name__ == '__main__':
         "--use-samples",
         dest="use_samples",
         help="Use the samples file"
+    )
+    parser.add_argument(
+        "-a",
+        "--average-runs",
+        dest="average_runs",
+        help="Computes average from all runs passed in --directory, or -d, flag"
     )
 
     args = parser.parse_args()

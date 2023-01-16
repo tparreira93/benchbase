@@ -18,7 +18,7 @@
 
 package com.oltpbenchmark.benchmarks.lsd.tpcc.pojo;
 
-import lsd.v2.api.Future;
+import trxsys.lsd.future.Future;
 
 import java.io.Serializable;
 

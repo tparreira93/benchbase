@@ -8,7 +8,7 @@ import argparse
 
 def fix_name(string):
     if string == "lsd":
-        return "lsd.v2.Driver"
+        return "trxsys.lsd.Driver"
     elif string == "base":
         return "org.postgresql.Driver"
     else:

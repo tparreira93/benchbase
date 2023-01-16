@@ -230,10 +230,17 @@
             <scope>test</scope>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>trxsys</groupId>-->
+<!--            <artifactId>lsd.v2</artifactId>-->
+<!--            <version>0.11.0</version>-->
+<!--        </dependency>-->
+
+
         <dependency>
             <groupId>trxsys</groupId>
-            <artifactId>lsd.v2</artifactId>
-            <version>0.11.0</version>
+            <artifactId>lsd</artifactId>
+            <version>a651415f454c6d18accbfd64ba866c50b5e05707-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

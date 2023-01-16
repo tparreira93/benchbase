@@ -1,0 +1,148 @@
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+  File "/home/jlourenco/tparreira/./plot_data.py", line 56, in join_files
+    final_df = pd.read_csv(files[0])
+IndexError: list index out of range
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+KeyError: 'psql_Sca10_Ter10_Dur120_NO100'
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+  File "/home/jlourenco/tparreira/./plot_data.py", line 56, in join_files
+    final_df = pd.read_csv(files[0])
+IndexError: list index out of range
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+KeyError: 'psql_Sca1_Ter10_Dur120_ALL'
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+  File "/home/jlourenco/tparreira/./plot_data.py", line 56, in join_files
+    final_df = pd.read_csv(files[0])
+IndexError: list index out of range
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+KeyError: 'psql_Sca10_Ter10_Dur120_ALL'
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+  File "/home/jlourenco/tparreira/./plot_data.py", line 56, in join_files
+    final_df = pd.read_csv(files[0])
+IndexError: list index out of range
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+KeyError: 'psql_Sca1_Ter10_Dur120_PA100'
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+  File "/home/jlourenco/tparreira/./plot_data.py", line 56, in join_files
+    final_df = pd.read_csv(files[0])
+IndexError: list index out of range
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+KeyError: 'psql_Sca10_Ter10_Dur120_PA100'
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+Traceback (most recent call last):
+  File "/home/jlourenco/tparreira/./plot_data.py", line 309, in <module>
+    run(args)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 288, in run
+    plot_samples(base_dir)
+  File "/home/jlourenco/tparreira/./plot_data.py", line 267, in plot_samples
+    lsd_results = join_files(lsd_tests[item])
+  File "/home/jlourenco/tparreira/./plot_data.py", line 56, in join_files
+    final_df = pd.read_csv(files[0])
+IndexError: list index out of range
+pg_ctl: directory "/tmp/tparreira/psql/databases" does not exist
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.

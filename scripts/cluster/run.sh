@@ -8,8 +8,8 @@ bench_type="tpcc"
 
 host=$(hostname)
 user="tparreira"
-benchbase_dir="/home/jlourenco/$user/benchbase-postgres"
-config_dir="/home/jlourenco/$user/benchbase-postgres/$bench_type"
+benchbase_dir="/home/jlourenco/$user/new-benchbase-postgres"
+config_dir="/home/jlourenco/$user/$bench_type"
 run_dir="$config_dir/run-$run"
 load_ready_file="$run_dir/load-ready"
 
@@ -151,8 +151,13 @@ do
         ./stop.sh
 
         ./plot_data.py -d "${run_dir}"
-
-        progressMessage "Run file updated!"
     fi
 
+    progressMessage "Finished Type: $type - Config: $config - Benchmark: $benchmark"
+
 done < "$test_file"
+
+
+if [ "$host" = "$database" ]; then
+    set_worker_ready "$host" "$run_dir"
+fi

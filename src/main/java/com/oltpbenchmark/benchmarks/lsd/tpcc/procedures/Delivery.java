@@ -22,14 +22,15 @@ import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCConfig;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCConstants;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCUtil;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCWorker;
-import lsd.v2.api.FutureConnection;
+import trxsys.lsd.api.FutureConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import trxsys.lsd.api.FutureResultChain;
+import trxsys.lsd.api.FutureResultSet;
+import trxsys.lsd.api.PreparedFutureStatement;
+import trxsys.lsd.future.Future;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Random;
@@ -40,51 +41,51 @@ public class Delivery extends FutureTPCCProcedure {
 
     public SQLStmt delivGetOrderIdSQL = new SQLStmt(
             "SELECT NO_O_ID FROM " + TPCCConstants.TABLENAME_NEWORDER +
-            " WHERE NO_D_ID = ? " +
-            "   AND NO_W_ID = ? " +
-            " ORDER BY NO_O_ID ASC " +
-            " LIMIT 1");
+                    " WHERE NO_D_ID = ? " +
+                    "   AND NO_W_ID = ? " +
+                    " ORDER BY NO_O_ID ASC " +
+                    " LIMIT 1");
 
     public SQLStmt delivDeleteNewOrderSQL = new SQLStmt(
             "DELETE FROM " + TPCCConstants.TABLENAME_NEWORDER +
-            " WHERE NO_O_ID = ? " +
-            "   AND NO_D_ID = ?" +
-            "   AND NO_W_ID = ?");
+                    " WHERE NO_O_ID = ? " +
+                    "   AND NO_D_ID = ?" +
+                    "   AND NO_W_ID = ?");
 
     public SQLStmt delivGetCustIdSQL = new SQLStmt(
             "SELECT O_C_ID FROM " + TPCCConstants.TABLENAME_OPENORDER +
-            " WHERE O_ID = ? " +
-            "   AND O_D_ID = ? " +
-            "   AND O_W_ID = ?");
+                    " WHERE O_ID = ? " +
+                    "   AND O_D_ID = ? " +
+                    "   AND O_W_ID = ?");
 
     public SQLStmt delivUpdateCarrierIdSQL = new SQLStmt(
             "UPDATE " + TPCCConstants.TABLENAME_OPENORDER +
-            "   SET O_CARRIER_ID = ? " +
-            " WHERE O_ID = ? " +
-            "   AND O_D_ID = ?" +
-            "   AND O_W_ID = ?");
+                    "   SET O_CARRIER_ID = ? " +
+                    " WHERE O_ID = ? " +
+                    "   AND O_D_ID = ?" +
+                    "   AND O_W_ID = ?");
 
     public SQLStmt delivUpdateDeliveryDateSQL = new SQLStmt(
             "UPDATE " + TPCCConstants.TABLENAME_ORDERLINE +
-            "   SET OL_DELIVERY_D = ? " +
-            " WHERE OL_O_ID = ? " +
-            "   AND OL_D_ID = ? " +
-            "   AND OL_W_ID = ? ");
+                    "   SET OL_DELIVERY_D = ? " +
+                    " WHERE OL_O_ID = ? " +
+                    "   AND OL_D_ID = ? " +
+                    "   AND OL_W_ID = ? ");
 
     public SQLStmt delivSumOrderAmountSQL = new SQLStmt(
             "SELECT SUM(OL_AMOUNT) AS OL_TOTAL " +
-            "  FROM " + TPCCConstants.TABLENAME_ORDERLINE +
-            " WHERE OL_O_ID = ? " +
-            "   AND OL_D_ID = ? " +
-            "   AND OL_W_ID = ?");
+                    "  FROM " + TPCCConstants.TABLENAME_ORDERLINE +
+                    " WHERE OL_O_ID = ? " +
+                    "   AND OL_D_ID = ? " +
+                    "   AND OL_W_ID = ?");
 
     public SQLStmt delivUpdateCustBalDelivCntSQL = new SQLStmt(
             "UPDATE " + TPCCConstants.TABLENAME_CUSTOMER +
-            "   SET C_BALANCE = C_BALANCE + ?," +
-            "       C_DELIVERY_CNT = C_DELIVERY_CNT + 1 " +
-            " WHERE C_W_ID = ? " +
-            "   AND C_D_ID = ? " +
-            "   AND C_ID = ? ");
+                    "   SET C_BALANCE = C_BALANCE + ?," +
+                    "       C_DELIVERY_CNT = C_DELIVERY_CNT + 1 " +
+                    " WHERE C_W_ID = ? " +
+                    "   AND C_D_ID = ? " +
+                    "   AND C_ID = ? ");
 
 
     public void run(FutureConnection conn, Random gen, int w_id, int numWarehouses, int terminalDistrictLowerID, int terminalDistrictUpperID, TPCCWorker w) throws SQLException {
@@ -93,26 +94,22 @@ public class Delivery extends FutureTPCCProcedure {
 
         int d_id;
 
-        int[] orderIDs = new int[10];
+        Future<Integer>[] orderIDs = new Future[10];
 
         for (d_id = 1; d_id <= terminalDistrictUpperID; d_id++) {
-            Integer no_o_id = getOrderId(conn, w_id, d_id);
-
-            if (no_o_id == null) {
-                continue;
-            }
+            Future<Integer> no_o_id = getOrderId(conn, w_id, d_id);
 
             orderIDs[d_id - 1] = no_o_id;
 
             deleteOrder(conn, w_id, d_id, no_o_id);
 
-            int customerId = getCustomerId(conn, w_id, d_id, no_o_id);
+            Future<Integer> customerId = getCustomerId(conn, w_id, d_id, no_o_id);
 
             updateCarrierId(conn, w_id, o_carrier_id, d_id, no_o_id);
 
             updateDeliveryDate(conn, w_id, d_id, no_o_id);
 
-            float orderLineTotal = getOrderLineTotal(conn, w_id, d_id, no_o_id);
+            Future<Float> orderLineTotal = getOrderLineTotal(conn, w_id, d_id, no_o_id);
 
             updateBalanceAndDelivery(conn, w_id, d_id, customerId, orderLineTotal);
         }
@@ -128,7 +125,7 @@ public class Delivery extends FutureTPCCProcedure {
             terminalMessage.append(o_carrier_id);
             terminalMessage.append("\n\n Delivered Orders\n");
             for (int i = 1; i <= TPCCConfig.configDistPerWhse; i++) {
-                if (orderIDs[i - 1] >= 0) {
+                if (orderIDs[i - 1].resolve() >= 0) {
                     terminalMessage.append("  District ");
                     terminalMessage.append(i < 10 ? " " : "");
                     terminalMessage.append(i);
@@ -143,37 +140,32 @@ public class Delivery extends FutureTPCCProcedure {
 
     }
 
-    private Integer getOrderId(Connection conn, int w_id, int d_id) throws SQLException {
+    private Future<Integer> getOrderId(FutureConnection conn, int w_id, int d_id) throws SQLException {
 
-        try (PreparedStatement delivGetOrderId = this.getPreparedStatement(conn, delivGetOrderIdSQL)) {
-            delivGetOrderId.setInt(1, d_id);
-            delivGetOrderId.setInt(2, w_id);
+        PreparedFutureStatement delivGetOrderId = this.getFuturePreparedStatement(conn, delivGetOrderIdSQL);
+        delivGetOrderId.setInt(1, d_id);
+        delivGetOrderId.setInt(2, w_id);
+        FutureResultSet futureResultSet = delivGetOrderId.executeFutureQuery();
 
-            try (ResultSet rs = delivGetOrderId.executeQuery()) {
 
-                if (!rs.next()) {
-                    // This district has no new orders.  This can happen but should be rare
-
-                    LOG.warn(String.format("District has no new orders [W_ID=%d, D_ID=%d]", w_id, d_id));
-
-                    return null;
-                }
-
-                return rs.getInt("NO_O_ID");
-
-            }
-        }
+        futureResultSet.ifEmpty(() -> {
+            // This district has no new orders.  This can happen but should be rare
+            LOG.warn(String.format("District has no new orders [W_ID=%d, D_ID=%d]", w_id, d_id));
+            conn.stop();
+        });
+        return futureResultSet.getFutureInt("NO_O_ID");
     }
 
-    private void deleteOrder(Connection conn, int w_id, int d_id, int no_o_id) throws SQLException {
-        try (PreparedStatement delivDeleteNewOrder = this.getPreparedStatement(conn, delivDeleteNewOrderSQL)) {
-            delivDeleteNewOrder.setInt(1, no_o_id);
-            delivDeleteNewOrder.setInt(2, d_id);
-            delivDeleteNewOrder.setInt(3, w_id);
+    private void deleteOrder(FutureConnection conn, int w_id, int d_id, Future<Integer> no_o_id) throws SQLException {
+        PreparedFutureStatement delivDeleteNewOrder = this.getFuturePreparedStatement(conn, delivDeleteNewOrderSQL);
+        delivDeleteNewOrder.setFutureInt(1, no_o_id);
+        delivDeleteNewOrder.setInt(2, d_id);
+        delivDeleteNewOrder.setInt(3, w_id);
 
-            int result = delivDeleteNewOrder.executeUpdate();
+        FutureResultChain<Integer> result = delivDeleteNewOrder.executeFutureUpdate();
 
-            if (result != 1) {
+        result.then(op -> {
+            if (op != 1) {
                 // This code used to run in a loop in an attempt to make this work
                 // with MySQL's default weird consistency level. We just always run
                 // this as SERIALIZABLE instead. I don't *think* that fixing this one
@@ -182,94 +174,103 @@ public class Delivery extends FutureTPCCProcedure {
                 String msg = String.format("NewOrder delete failed. Not running with SERIALIZABLE isolation? [w_id=%d, d_id=%d, no_o_id=%d]", w_id, d_id, no_o_id);
                 throw new UserAbortException(msg);
             }
-        }
+        });
     }
 
-    private int getCustomerId(Connection conn, int w_id, int d_id, int no_o_id) throws SQLException {
+    private Future<Integer> getCustomerId(FutureConnection conn, int w_id, int d_id, Future<Integer> no_o_id) throws SQLException {
+        PreparedFutureStatement delivGetCustId = this.getFuturePreparedStatement(conn, delivGetCustIdSQL);
+        delivGetCustId.setFutureInt(1, no_o_id);
+        delivGetCustId.setInt(2, d_id);
+        delivGetCustId.setInt(3, w_id);
 
-        try (PreparedStatement delivGetCustId = this.getPreparedStatement(conn, delivGetCustIdSQL)) {
-            delivGetCustId.setInt(1, no_o_id);
-            delivGetCustId.setInt(2, d_id);
-            delivGetCustId.setInt(3, w_id);
+        FutureResultSet futureResultSet = delivGetCustId.executeFutureQuery();
+        futureResultSet.ifEmpty(() -> {
+            String msg = String.format("Failed to retrieve ORDER record [W_ID=%d, D_ID=%d, O_ID=%d]", w_id, d_id, no_o_id);
+            throw new RuntimeException(msg);
+        });
 
-            try (ResultSet rs = delivGetCustId.executeQuery()) {
-
-                if (!rs.next()) {
-                    String msg = String.format("Failed to retrieve ORDER record [W_ID=%d, D_ID=%d, O_ID=%d]", w_id, d_id, no_o_id);
-                    throw new RuntimeException(msg);
-                }
-
-                return rs.getInt("O_C_ID");
-            }
-        }
+        return futureResultSet.getFutureInt("O_C_ID");
     }
 
-    private void updateCarrierId(Connection conn, int w_id, int o_carrier_id, int d_id, int no_o_id) throws SQLException {
-        try (PreparedStatement delivUpdateCarrierId = this.getPreparedStatement(conn, delivUpdateCarrierIdSQL)) {
-            delivUpdateCarrierId.setInt(1, o_carrier_id);
-            delivUpdateCarrierId.setInt(2, no_o_id);
-            delivUpdateCarrierId.setInt(3, d_id);
-            delivUpdateCarrierId.setInt(4, w_id);
+    private void updateCarrierId(FutureConnection conn, int w_id, int o_carrier_id, int d_id, Future<Integer> no_o_id) throws SQLException {
+        PreparedFutureStatement delivUpdateCarrierId = this.getFuturePreparedStatement(conn, delivUpdateCarrierIdSQL);
+        delivUpdateCarrierId.setInt(1, o_carrier_id);
+        delivUpdateCarrierId.setFutureInt(2, no_o_id);
+        delivUpdateCarrierId.setInt(3, d_id);
+        delivUpdateCarrierId.setInt(4, w_id);
 
-            int result = delivUpdateCarrierId.executeUpdate();
+        FutureResultChain<Integer> result = delivUpdateCarrierId.executeFutureUpdate();
 
-            if (result != 1) {
+        result.then(res -> {
+            if (res != 1) {
                 String msg = String.format("Failed to update ORDER record [W_ID=%d, D_ID=%d, O_ID=%d]", w_id, d_id, no_o_id);
                 throw new RuntimeException(msg);
             }
-        }
+        });
     }
 
-    private void updateDeliveryDate(Connection conn, int w_id, int d_id, int no_o_id) throws SQLException {
+    private void updateDeliveryDate(FutureConnection conn, int w_id, int d_id, Future<Integer> no_o_id) throws SQLException {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        try (PreparedStatement delivUpdateDeliveryDate = this.getPreparedStatement(conn, delivUpdateDeliveryDateSQL)) {
-            delivUpdateDeliveryDate.setTimestamp(1, timestamp);
-            delivUpdateDeliveryDate.setInt(2, no_o_id);
-            delivUpdateDeliveryDate.setInt(3, d_id);
-            delivUpdateDeliveryDate.setInt(4, w_id);
+        PreparedFutureStatement delivUpdateDeliveryDate = this.getFuturePreparedStatement(conn, delivUpdateDeliveryDateSQL);
+        delivUpdateDeliveryDate.setTimestamp(1, timestamp);
+        delivUpdateDeliveryDate.setFutureInt(2, no_o_id);
+        delivUpdateDeliveryDate.setInt(3, d_id);
+        delivUpdateDeliveryDate.setInt(4, w_id);
 
-            int result = delivUpdateDeliveryDate.executeUpdate();
+        FutureResultChain<Integer> result = delivUpdateDeliveryDate.executeFutureUpdate();
 
-            if (result == 0) {
+        result.then(res -> {
+            if (res == 0) {
                 String msg = String.format("Failed to update ORDER_LINE records [W_ID=%d, D_ID=%d, O_ID=%d]", w_id, d_id, no_o_id);
                 throw new RuntimeException(msg);
             }
-        }
+        });
     }
 
-    private float getOrderLineTotal(Connection conn, int w_id, int d_id, int no_o_id) throws SQLException {
-        try (PreparedStatement delivSumOrderAmount = this.getPreparedStatement(conn, delivSumOrderAmountSQL)) {
-            delivSumOrderAmount.setInt(1, no_o_id);
-            delivSumOrderAmount.setInt(2, d_id);
-            delivSumOrderAmount.setInt(3, w_id);
+    private Future<Float> getOrderLineTotal(FutureConnection conn, int w_id, int d_id, Future<Integer> no_o_id) throws SQLException {
+        PreparedFutureStatement delivSumOrderAmount = this.getFuturePreparedStatement(conn, delivSumOrderAmountSQL);
+        delivSumOrderAmount.setFutureInt(1, no_o_id);
+        delivSumOrderAmount.setInt(2, d_id);
+        delivSumOrderAmount.setInt(3, w_id);
 
-            try (ResultSet rs = delivSumOrderAmount.executeQuery()) {
-                if (!rs.next()) {
-                    String msg = String.format("Failed to retrieve ORDER_LINE records [W_ID=%d, D_ID=%d, O_ID=%d]", w_id, d_id, no_o_id);
-                    throw new RuntimeException(msg);
-                }
+        FutureResultSet futureResultSet = delivSumOrderAmount.executeFutureQuery();
+        futureResultSet.ifEmpty(() -> {
+            String msg = String.format("Failed to retrieve ORDER_LINE records [W_ID=%d, D_ID=%d, O_ID=%d]", w_id, d_id, no_o_id);
+            throw new RuntimeException(msg);
+        });
 
-                return rs.getFloat("OL_TOTAL");
+        return futureResultSet.getFutureFloat("OL_TOTAL");
+    }
+
+
+    private void updateBalanceAndDelivery(FutureConnection conn, int w_id, int d_id, Future<Integer> c_id, Future<Float> orderLineTotal) throws SQLException {
+        Future<BigDecimal> orderLine = new Future<>() {
+            @Override
+            public BigDecimal resolve() {
+                return BigDecimal.valueOf(orderLineTotal.resolve());
             }
-        }
-    }
 
-    private void updateBalanceAndDelivery(Connection conn, int w_id, int d_id, int c_id, float orderLineTotal) throws SQLException {
+            @Override
+            public void dispose() {
 
-        try (PreparedStatement delivUpdateCustBalDelivCnt = this.getPreparedStatement(conn, delivUpdateCustBalDelivCntSQL)) {
-            delivUpdateCustBalDelivCnt.setBigDecimal(1, BigDecimal.valueOf(orderLineTotal));
-            delivUpdateCustBalDelivCnt.setInt(2, w_id);
-            delivUpdateCustBalDelivCnt.setInt(3, d_id);
-            delivUpdateCustBalDelivCnt.setInt(4, c_id);
+            }
+        };
 
-            int result = delivUpdateCustBalDelivCnt.executeUpdate();
+        PreparedFutureStatement delivUpdateCustBalDelivCnt = this.getFuturePreparedStatement(conn, delivUpdateCustBalDelivCntSQL);
+        delivUpdateCustBalDelivCnt.setFutureBigDecimal(1, orderLine);
+        delivUpdateCustBalDelivCnt.setInt(2, w_id);
+        delivUpdateCustBalDelivCnt.setInt(3, d_id);
+        delivUpdateCustBalDelivCnt.setFutureInt(4, c_id);
 
+        FutureResultChain<Integer> integerFutureResultChain = delivUpdateCustBalDelivCnt.executeFutureUpdate();
+
+        integerFutureResultChain.then(result -> {
             if (result == 0) {
                 String msg = String.format("Failed to update CUSTOMER record [W_ID=%d, D_ID=%d, C_ID=%d]", w_id, d_id, c_id);
                 throw new RuntimeException(msg);
             }
-        }
+        });
     }
 
 }

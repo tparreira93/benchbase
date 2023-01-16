@@ -37,6 +37,7 @@ import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import trxsys.lsd.Driver;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,8 +61,8 @@ public class DBWorkload {
     public static void main(String[] args) throws Exception {
 
 
-        lsd.v2.Driver driverV2 = new lsd.v2.Driver();
-        DriverManager.registerDriver(driverV2);
+        Driver driver = new Driver();
+        DriverManager.registerDriver(driver);
         // create the command line parser
         CommandLineParser parser = new DefaultParser();
 

@@ -23,13 +23,13 @@ import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCConstants;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCUtil;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCWorker;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.FutureStock;
-import kotlin.Unit;
-import lsd.v2.api.Future;
-import lsd.v2.api.FutureConnection;
-import lsd.v2.api.FutureResultSet;
-import lsd.v2.api.PreparedFutureStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import trxsys.lsd.api.FutureConnection;
+import trxsys.lsd.api.FutureResultChain;
+import trxsys.lsd.api.FutureResultSet;
+import trxsys.lsd.api.PreparedFutureStatement;
+import trxsys.lsd.future.Future;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -257,16 +257,8 @@ public class NewOrder extends FutureTPCCProcedure {
         stmtGetStock.setInt(2, ol_supply_w_id);
         FutureResultSet result = stmtGetStock.executeFutureQuery();
 
-        stmtGetStock.afterQueryExecution(operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("S_I_ID=" + ol_i_id + " not found!");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            return Unit.INSTANCE;
+        result.ifEmpty(() -> {
+            throw new RuntimeException("S_I_ID=" + ol_i_id + " not found!");
         });
 
         FutureStock s = new FutureStock();
@@ -307,20 +299,13 @@ public class NewOrder extends FutureTPCCProcedure {
         stmtGetItem.setInt(1, ol_i_id);
 
 
-        stmtGetItem.afterQueryExecution((operationResult -> {
-            try {
-                if (operationResult.get().isClosed()) {
-                    // This is (hopefully) an expected error: this is an expected new order rollback
-                    throw new UserAbortException("EXPECTED new order rollback: I_ID=" + ol_i_id + " not found!");
-                }
+        FutureResultSet futureResultSet = stmtGetItem.executeFutureQuery();
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return Unit.INSTANCE;
-        }));
+        futureResultSet.ifEmpty(() -> {
+            throw new UserAbortException("EXPECTED new order rollback: I_ID=" + ol_i_id + " not found!");
+        });
 
-        return stmtGetItem.executeFutureQuery().getFutureFloat("I_PRICE");
+        return futureResultSet.getFutureFloat("I_PRICE");
     }
 
     private void insertNewOrder(FutureConnection conn, int w_id, int d_id, Future<Integer> o_id) throws SQLException {
@@ -328,13 +313,12 @@ public class NewOrder extends FutureTPCCProcedure {
         stmtInsertNewOrder.setFutureInt(1, o_id);
         stmtInsertNewOrder.setInt(2, d_id);
         stmtInsertNewOrder.setInt(3, w_id);
-        stmtInsertNewOrder.executeFutureUpdate();
+        FutureResultChain<Integer> result = stmtInsertNewOrder.executeFutureUpdate();
 
-        stmtInsertNewOrder.afterUpdateExecution((operationResult -> {
-            if (operationResult.get() == 0) {
+        result.then((operationResult -> {
+            if (operationResult == 0) {
                 LOG.warn("new order not inserted");
             }
-            return Unit.INSTANCE;
         }));
     }
 
@@ -348,13 +332,13 @@ public class NewOrder extends FutureTPCCProcedure {
         stmtInsertOOrder.setInt(6, o_ol_cnt);
         stmtInsertOOrder.setInt(7, o_all_local);
 
-        stmtInsertOOrder.executeFutureUpdate();
+        FutureResultChain<Integer> result = stmtInsertOOrder.executeFutureUpdate();
 
-        stmtInsertOOrder.afterUpdateExecution((operationResult -> {
-            if (operationResult.get() == 0) {
+        result.then((operationResult -> {
+            if (operationResult == 0) {
                 LOG.warn("open order not inserted");
             }
-            return Unit.INSTANCE;
+
         }));
     }
 
@@ -363,12 +347,12 @@ public class NewOrder extends FutureTPCCProcedure {
         stmtUpdateDist.setInt(1, w_id);
         stmtUpdateDist.setInt(2, d_id);
 
-        stmtUpdateDist.executeFutureUpdate();
-        stmtUpdateDist.afterUpdateExecution((operationResult -> {
-            if (operationResult.get() == 0) {
+        FutureResultChain<Integer> result = stmtUpdateDist.executeFutureUpdate();
+        result.then((operationResult -> {
+            if (operationResult == 0) {
                 throw new RuntimeException("Error!! Cannot update next_order_id on district for D_ID=" + d_id + " D_W_ID=" + w_id);
             }
-            return Unit.INSTANCE;
+
         }));
     }
 
@@ -377,36 +361,24 @@ public class NewOrder extends FutureTPCCProcedure {
         stmtGetDist.setInt(1, w_id);
         stmtGetDist.setInt(2, d_id);
 
-        stmtGetDist.afterQueryExecution((operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("D_ID=" + d_id + " D_W_ID=" + w_id + " not found!");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException("Unexpected exception!");
-            }
-            return Unit.INSTANCE;
-        }));
+        FutureResultSet futureResultSet = stmtGetDist.executeFutureQuery();
 
-        return stmtGetDist.executeFutureQuery().getFutureInt("D_NEXT_O_ID");
+        futureResultSet.ifEmpty(() -> {
+            throw new RuntimeException("D_ID=" + d_id + " D_W_ID=" + w_id + " not found!");
+        });
+
+        return futureResultSet.getFutureInt("D_NEXT_O_ID");
     }
 
 
     private void getWarehouse(FutureConnection conn, int w_id) throws SQLException {
         PreparedFutureStatement stmtGetWhse = this.getFuturePreparedStatement(conn, stmtGetWhseSQL);
         stmtGetWhse.setInt(1, w_id);
-        stmtGetWhse.executeFutureQuery();
+        FutureResultSet futureResultSet = stmtGetWhse.executeFutureQuery();
 
-        stmtGetWhse.afterQueryExecution((operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("W_ID=" + w_id + " not found!");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException("Unexpected exception!");
-            }
-            return Unit.INSTANCE;
-        }));
+        futureResultSet.ifEmpty(() -> {
+            throw new RuntimeException("W_ID=" + w_id + " not found!");
+        });
     }
 
 
@@ -415,18 +387,11 @@ public class NewOrder extends FutureTPCCProcedure {
         stmtGetCust.setInt(1, w_id);
         stmtGetCust.setInt(2, d_id);
         stmtGetCust.setInt(3, c_id);
-        stmtGetCust.executeFutureQuery();
+        FutureResultSet futureResultSet = stmtGetCust.executeFutureQuery();
 
-        stmtGetCust.afterQueryExecution((operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("C_D_ID=" + d_id + " C_ID=" + c_id + " not found!");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException("Unexpected exception!");
-            }
-            return Unit.INSTANCE;
-        }));
+        futureResultSet.ifEmpty(() -> {
+            throw new RuntimeException("C_D_ID=" + d_id + " C_ID=" + c_id + " not found!");
+        });
     }
 
 }

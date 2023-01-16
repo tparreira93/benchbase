@@ -19,7 +19,7 @@ package com.oltpbenchmark.benchmarks.lsd.tpcc.procedures;
 
 import com.oltpbenchmark.api.FutureProcedure;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCWorker;
-import lsd.v2.api.FutureConnection;
+import trxsys.lsd.api.FutureConnection;
 
 import java.sql.SQLException;
 import java.util.Random;

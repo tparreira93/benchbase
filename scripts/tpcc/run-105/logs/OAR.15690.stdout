@@ -1,0 +1,1004 @@
+===================================================================================================================================
+Host gengar-2 running in /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29 directory
+===================================================================================================================================
+===================================================================================================================================
+Starting run 105 with 5 workers, /home/jlourenco/tparreira/tests.txt test file and charmander-4 database...
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: base - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+Waiting for all workers to be ready (1 / 5)
+Waiting for all workers to be ready (1 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:40:05,136 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/base/psql_Sca1_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:40:05,138 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:40:06,072 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 03:40:06,227 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC Benchmark with 1 Phase...
+[INFO ] 2022-09-28 03:40:06,281 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[100.0, 0.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 03:40:06,283 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[WARN ] 2022-09-28 03:41:59,230 [TPCCWorker<000>]  com.oltpbenchmark.api.Worker doWork - SQLException occurred during [com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01] and will not be retried... sql state [40P01], error code [0].
+org.postgresql.util.PSQLException: ERROR: deadlock detected
+  Detail: Process 828620 waits for ShareLock on transaction 204979; blocked by process 828633.
+Process 828633 waits for ShareLock on transaction 204955; blocked by process 828620.
+  Hint: See server log for query details.
+  Where: while locking tuple (4372,24) in relation "stock"
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2675)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2365)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:355)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:490)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:408)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:166)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:118)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.getStock(NewOrder.java:245)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.newOrderTransaction(NewOrder.java:161)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.run(NewOrder.java:126)
+	at com.oltpbenchmark.benchmarks.tpcc.TPCCWorker.executeWork(TPCCWorker.java:67)
+	at com.oltpbenchmark.api.Worker.doWork(Worker.java:412)
+	at com.oltpbenchmark.api.Worker.run(Worker.java:287)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+[WARN ] 2022-09-28 03:42:03,125 [TPCCWorker<003>]  com.oltpbenchmark.api.Worker doWork - SQLException occurred during [com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01] and will not be retried... sql state [40P01], error code [0].
+org.postgresql.util.PSQLException: ERROR: deadlock detected
+  Detail: Process 828627 waits for ShareLock on transaction 210811; blocked by process 828648.
+Process 828648 waits for ShareLock on transaction 210810; blocked by process 828627.
+  Hint: See server log for query details.
+  Where: while locking tuple (1408,33) in relation "stock"
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2675)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2365)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:355)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:490)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:408)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:166)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:118)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.getStock(NewOrder.java:245)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.newOrderTransaction(NewOrder.java:161)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.run(NewOrder.java:126)
+	at com.oltpbenchmark.benchmarks.tpcc.TPCCWorker.executeWork(TPCCWorker.java:67)
+	at com.oltpbenchmark.api.Worker.doWork(Worker.java:412)
+	at com.oltpbenchmark.api.Worker.run(Worker.java:287)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+[INFO ] 2022-09-28 03:42:06,287 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 03:42:06,303 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 03:42:06,509 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 03:42:06,509 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000875406, measuredRequests=44742) = 372.8472800604496 requests/sec (throughput), 69.3911604546816 requests/sec (goodput)
+[INFO ] 2022-09-28 03:42:06,582 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_2022-09-28_03-42-06.raw.csv
+[INFO ] 2022-09-28 03:42:07,633 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_03-42-06.samples.csv
+[INFO ] 2022-09-28 03:42:07,724 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_03-42-06.custom.csv
+[INFO ] 2022-09-28 03:42:07,749 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_2022-09-28_03-42-06.summary.json
+[INFO ] 2022-09-28 03:42:07,781 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_2022-09-28_03-42-06.params.json
+[INFO ] 2022-09-28 03:42:07,796 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_2022-09-28_03-42-06.metrics.json
+[INFO ] 2022-09-28 03:42:07,821 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_2022-09-28_03-42-06.config.xml
+[INFO ] 2022-09-28 03:42:08,102 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_2022-09-28_03-42-06.results.csv with window size 5
+[INFO ] 2022-09-28 03:42:08,200 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 03:42:08,200 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [8327] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.OrderStatus/03                      [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [   0] 
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [  99] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [36325] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [   2] ********************************************************************************
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 03:42:08,201 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: lsd - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+Waiting for all workers to be ready (4 / 5)
+Waiting for all workers to be ready (4 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:45:42,273 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/lsd/psql_Sca1_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:45:42,275 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:45:42,924 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 03:45:43,068 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC_LSD Benchmark with 1 Phase...
+[INFO ] 2022-09-28 03:45:43,119 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC_LSD] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[100.0, 0.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 03:45:43,121 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 03:47:43,125 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 03:47:43,151 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 03:47:43,365 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 03:47:43,365 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000168794, measuredRequests=63714) = 530.9492531579314 requests/sec (throughput), 294.46625246552816 requests/sec (goodput)
+[INFO ] 2022-09-28 03:47:43,424 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_lsd_2022-09-28_03-47-43.raw.csv
+[INFO ] 2022-09-28 03:47:44,709 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_03-47-43.samples.csv
+[INFO ] 2022-09-28 03:47:44,806 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_03-47-43.custom.csv
+[INFO ] 2022-09-28 03:47:44,836 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_lsd_2022-09-28_03-47-43.summary.json
+[INFO ] 2022-09-28 03:47:44,850 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_lsd_2022-09-28_03-47-43.params.json
+[INFO ] 2022-09-28 03:47:44,866 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_lsd_2022-09-28_03-47-43.metrics.json
+[INFO ] 2022-09-28 03:47:44,894 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_lsd_2022-09-28_03-47-43.config.xml
+[INFO ] 2022-09-28 03:47:44,979 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_lsd_2022-09-28_03-47-43.results.csv with window size 5
+[INFO ] 2022-09-28 03:47:45,104 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 03:47:45,104 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [35336] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [    0] 
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [  75] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [28314] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 03:47:45,104 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: base - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+Waiting for all workers to be ready (3 / 5)
+Waiting for all workers to be ready (3 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:52:19,424 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/base/psql_Sca10_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:52:19,427 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:52:20,061 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 03:52:20,212 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC Benchmark with 1 Phase...
+[INFO ] 2022-09-28 03:52:20,260 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[100.0, 0.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 03:52:20,261 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[WARN ] 2022-09-28 03:53:11,601 [TPCCWorker<008>]  com.oltpbenchmark.api.Worker doWork - SQLException occurred during [com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01] and will not be retried... sql state [40P01], error code [0].
+org.postgresql.util.PSQLException: ERROR: deadlock detected
+  Detail: Process 829700 waits for ShareLock on transaction 134802; blocked by process 829678.
+Process 829678 waits for ShareLock on transaction 134788; blocked by process 829700.
+  Hint: See server log for query details.
+  Where: while locking tuple (14762,30) in relation "stock"
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2675)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2365)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:355)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:490)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:408)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:166)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:118)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.getStock(NewOrder.java:245)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.newOrderTransaction(NewOrder.java:161)
+	at com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder.run(NewOrder.java:126)
+	at com.oltpbenchmark.benchmarks.tpcc.TPCCWorker.executeWork(TPCCWorker.java:67)
+	at com.oltpbenchmark.api.Worker.doWork(Worker.java:412)
+	at com.oltpbenchmark.api.Worker.run(Worker.java:287)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+[INFO ] 2022-09-28 03:54:20,265 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 03:54:20,289 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 03:54:20,496 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 03:54:20,496 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000233725, measuredRequests=32933) = 274.4411321353866 requests/sec (throughput), 178.38298589530518 requests/sec (goodput)
+[INFO ] 2022-09-28 03:54:20,564 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_2022-09-28_03-54-20.raw.csv
+[INFO ] 2022-09-28 03:54:21,474 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_03-54-20.samples.csv
+[INFO ] 2022-09-28 03:54:21,561 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_03-54-20.custom.csv
+[INFO ] 2022-09-28 03:54:21,579 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_2022-09-28_03-54-20.summary.json
+[INFO ] 2022-09-28 03:54:21,593 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_2022-09-28_03-54-20.params.json
+[INFO ] 2022-09-28 03:54:21,609 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_2022-09-28_03-54-20.metrics.json
+[INFO ] 2022-09-28 03:54:21,634 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_2022-09-28_03-54-20.config.xml
+[INFO ] 2022-09-28 03:54:21,728 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_2022-09-28_03-54-20.results.csv with window size 5
+[INFO ] 2022-09-28 03:54:21,817 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 03:54:21,817 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [21406] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [    0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.OrderStatus/03                      [    0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [    0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [    0] 
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [ 245] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [11291] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [   1] ********************************************************************************
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 03:54:21,817 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: lsd - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+Waiting for all workers to be ready (3 / 5)
+Waiting for all workers to be ready (3 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:59:56,415 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/lsd/psql_Sca10_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:59:56,417 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:59:57,063 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 03:59:57,227 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC_LSD Benchmark with 1 Phase...
+[INFO ] 2022-09-28 03:59:57,285 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC_LSD] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[100.0, 0.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 03:59:57,287 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[WARN ] 2022-09-28 04:01:10,947 [TPCCWorker<006>]  com.oltpbenchmark.api.Worker doWork - SQLException occurred during [com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01] and will not be retried... sql state [40P01], error code [0].
+org.postgresql.util.PSQLException: ERROR: deadlock detected
+  Detail: Process 830352 waits for ShareLock on transaction 132370; blocked by process 830309.
+Process 830309 waits for ShareLock on transaction 132387; blocked by process 830352.
+  Hint: See server log for query details.
+  Where: while locking tuple (9764,30) in relation "stock"
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2675)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2365)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:355)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:490)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:408)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:166)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:118)
+	at trxsys.lsd.jdbc.LSDPreparedStatement$executeFutureQuery$futureQuery$1$1.invoke(LSDPreparedStatement.kt:67)
+	at trxsys.lsd.jdbc.LSDPreparedStatement$executeFutureQuery$futureQuery$1$1.invoke(LSDPreparedStatement.kt:67)
+	at trxsys.lsd.jdbc.LSDPreparedStatement.prepareExec(LSDPreparedStatement.kt:39)
+	at trxsys.lsd.jdbc.LSDPreparedStatement.access$prepareExec(LSDPreparedStatement.kt:17)
+	at trxsys.lsd.jdbc.LSDPreparedStatement$executeFutureQuery$futureQuery$1.resolve(LSDPreparedStatement.kt:67)
+	at trxsys.lsd.jdbc.LSDPreparedStatement$executeFutureQuery$futureQuery$1.resolve(LSDPreparedStatement.kt:67)
+	at trxsys.lsd.future.CachedFuture.resolve(CachedFuture.kt:9)
+	at trxsys.lsd.jdbc.LSDPreparedStatement.resolve(LSDPreparedStatement.kt:47)
+	at trxsys.lsd.jdbc.LSDConnection.commit(LSDConnection.kt:125)
+	at com.oltpbenchmark.api.Worker.doWork(Worker.java:424)
+	at com.oltpbenchmark.api.Worker.run(Worker.java:287)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+[INFO ] 2022-09-28 04:01:57,290 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:01:57,330 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:01:57,529 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:01:57,530 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000228218, measuredRequests=40110) = 334.2493643189881 requests/sec (throughput), 250.9995226449245 requests/sec (goodput)
+[INFO ] 2022-09-28 04:01:57,627 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_lsd_2022-09-28_04-01-57.raw.csv
+[INFO ] 2022-09-28 04:01:58,672 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-01-57.samples.csv
+[INFO ] 2022-09-28 04:01:58,803 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-01-57.custom.csv
+[INFO ] 2022-09-28 04:01:58,871 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_lsd_2022-09-28_04-01-57.summary.json
+[INFO ] 2022-09-28 04:01:58,885 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_lsd_2022-09-28_04-01-57.params.json
+[INFO ] 2022-09-28 04:01:58,901 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_lsd_2022-09-28_04-01-57.metrics.json
+[INFO ] 2022-09-28 04:01:58,928 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_lsd_2022-09-28_04-01-57.config.xml
+[INFO ] 2022-09-28 04:01:59,007 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_lsd_2022-09-28_04-01-57.results.csv with window size 5
+[INFO ] 2022-09-28 04:01:59,118 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:01:59,118 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [30120] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [    0] 
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [ 230] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [9770] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [   1] ********************************************************************************
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:01:59,118 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: base - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+Waiting for all workers to be ready (1 / 5)
+Waiting for all workers to be ready (1 / 5)
+Waiting for all workers to be ready (3 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:06:31,482 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/base/psql_Sca1_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:06:31,484 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:06:32,059 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:06:32,193 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:06:32,239 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[45.0, 43.0, 4.0, 4.0, 4.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:06:32,240 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:08:32,244 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:08:32,279 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:08:32,436 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:08:32,436 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000752798, measuredRequests=51753) = 431.2722944923271 requests/sec (throughput), 82.86614682108672 requests/sec (goodput)
+[INFO ] 2022-09-28 04:08:32,511 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_2022-09-28_04-08-32.raw.csv
+[INFO ] 2022-09-28 04:08:33,890 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-08-32.samples.csv
+[INFO ] 2022-09-28 04:08:33,986 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-08-32.custom.csv
+[INFO ] 2022-09-28 04:08:34,015 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_2022-09-28_04-08-32.summary.json
+[INFO ] 2022-09-28 04:08:34,029 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_2022-09-28_04-08-32.params.json
+[INFO ] 2022-09-28 04:08:34,047 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_2022-09-28_04-08-32.metrics.json
+[INFO ] 2022-09-28 04:08:34,074 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_2022-09-28_04-08-32.config.xml
+[INFO ] 2022-09-28 04:08:34,150 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_2022-09-28_04-08-32.results.csv with window size 5
+[INFO ] 2022-09-28 04:08:34,260 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:08:34,261 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [5069] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [ 356] *****
+com.oltpbenchmark.benchmarks.tpcc.procedures.OrderStatus/03                      [2098] *********************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [ 551] ********
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [1870] *****************************
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [  79] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [18348] *******************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [21651] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [ 1554] *****
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [  187] 
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:08:34,261 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: lsd - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+Waiting for all workers to be ready (5 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:12:06,384 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/lsd/psql_Sca1_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:12:06,386 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:12:06,982 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:12:07,126 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC_LSD Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:12:07,186 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC_LSD] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[45.0, 43.0, 4.0, 4.0, 4.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:12:07,188 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:14:07,192 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:14:07,213 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:14:07,475 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:14:07,476 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000965347, measuredRequests=70807) = 590.053586612836 requests/sec (throughput), 251.73130826613968 requests/sec (goodput)
+[INFO ] 2022-09-28 04:14:07,558 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_lsd_2022-09-28_04-14-07.raw.csv
+[INFO ] 2022-09-28 04:14:09,233 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-14-07.samples.csv
+[INFO ] 2022-09-28 04:14:09,379 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-14-07.custom.csv
+[INFO ] 2022-09-28 04:14:09,409 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_lsd_2022-09-28_04-14-07.summary.json
+[INFO ] 2022-09-28 04:14:09,423 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_lsd_2022-09-28_04-14-07.params.json
+[INFO ] 2022-09-28 04:14:09,439 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_lsd_2022-09-28_04-14-07.metrics.json
+[INFO ] 2022-09-28 04:14:09,467 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_lsd_2022-09-28_04-14-07.config.xml
+[INFO ] 2022-09-28 04:14:09,547 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_lsd_2022-09-28_04-14-07.results.csv with window size 5
+[INFO ] 2022-09-28 04:14:09,654 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:14:09,654 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [20799] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [ 2288] ********
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [ 2793] **********
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [ 1988] *******
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [ 2340] *********
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [  50] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [10902] ******************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [28301] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [   32] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [  839] **
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [  486] *
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:14:09,654 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: base - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+Waiting for all workers to be ready (1 / 5)
+Waiting for all workers to be ready (1 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:18:44,035 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/base/psql_Sca10_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:18:44,037 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:18:44,587 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:18:44,734 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:18:44,792 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[45.0, 43.0, 4.0, 4.0, 4.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:18:44,795 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:20:44,799 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:20:44,850 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:20:45,000 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:20:45,000 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000552152, measuredRequests=43822) = 365.18165303516594 requests/sec (throughput), 147.24098917161123 requests/sec (goodput)
+[INFO ] 2022-09-28 04:20:45,057 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_2022-09-28_04-20-45.raw.csv
+[INFO ] 2022-09-28 04:20:46,217 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-20-45.samples.csv
+[INFO ] 2022-09-28 04:20:46,302 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-20-45.custom.csv
+[INFO ] 2022-09-28 04:20:46,333 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_2022-09-28_04-20-45.summary.json
+[INFO ] 2022-09-28 04:20:46,347 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_2022-09-28_04-20-45.params.json
+[INFO ] 2022-09-28 04:20:46,364 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_2022-09-28_04-20-45.metrics.json
+[INFO ] 2022-09-28 04:20:46,394 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_2022-09-28_04-20-45.config.xml
+[INFO ] 2022-09-28 04:20:46,473 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_2022-09-28_04-20-45.results.csv with window size 5
+[INFO ] 2022-09-28 04:20:46,568 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:20:46,569 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [8020] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [5022] **************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.OrderStatus/03                      [1764] *****************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [1251] ************
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [1612] ****************
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [ 127] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [11533] ******************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [13882] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [  467] **
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [  155] 
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:20:46,569 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: lsd - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+Waiting for all workers to be ready (2 / 5)
+Waiting for all workers to be ready (2 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:26:21,146 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/lsd/psql_Sca10_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:26:21,148 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:26:21,733 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:26:21,892 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC_LSD Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:26:21,952 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC_LSD] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[45.0, 43.0, 4.0, 4.0, 4.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:26:21,954 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:28:21,958 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:28:22,027 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:28:22,251 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:28:22,251 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000768851, measuredRequests=56638) = 471.9803093122267 requests/sec (throughput), 260.20666616537096 requests/sec (goodput)
+[INFO ] 2022-09-28 04:28:22,307 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_lsd_2022-09-28_04-28-22.raw.csv
+[INFO ] 2022-09-28 04:28:23,638 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-28-22.samples.csv
+[INFO ] 2022-09-28 04:28:23,735 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-28-22.custom.csv
+[INFO ] 2022-09-28 04:28:23,768 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_lsd_2022-09-28_04-28-22.summary.json
+[INFO ] 2022-09-28 04:28:23,782 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_lsd_2022-09-28_04-28-22.params.json
+[INFO ] 2022-09-28 04:28:23,800 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_lsd_2022-09-28_04-28-22.metrics.json
+[INFO ] 2022-09-28 04:28:23,829 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_lsd_2022-09-28_04-28-22.config.xml
+[INFO ] 2022-09-28 04:28:23,917 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_lsd_2022-09-28_04-28-22.results.csv with window size 5
+[INFO ] 2022-09-28 04:28:24,029 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:28:24,029 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [16842] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [ 8010] **************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [ 2254] **********
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [ 1952] *********
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [ 2167] **********
+
+[0;1mAborted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [  92] ********************************************************************************
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [ 8448] *****************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [16392] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [   15] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [  331] *
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [  146] 
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:28:24,029 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: base - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+Waiting for all workers to be ready (3 / 5)
+Waiting for all workers to be ready (3 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:32:58,318 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/base/psql_Sca1_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:32:58,320 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:32:58,825 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:32:58,978 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:32:59,030 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[0.0, 100.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:32:59,031 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:34:59,034 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:34:59,042 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:34:59,425 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:34:59,426 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000199628, measuredRequests=125792) = 1048.2649228080832 requests/sec (throughput), 4.833325292774487 requests/sec (goodput)
+[INFO ] 2022-09-28 04:34:59,485 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_2022-09-28_04-34-59.raw.csv
+[INFO ] 2022-09-28 04:35:01,928 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-34-59.samples.csv
+[INFO ] 2022-09-28 04:35:02,048 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-34-59.custom.csv
+[INFO ] 2022-09-28 04:35:02,100 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_2022-09-28_04-34-59.summary.json
+[INFO ] 2022-09-28 04:35:02,114 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_2022-09-28_04-34-59.params.json
+[INFO ] 2022-09-28 04:35:02,129 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_2022-09-28_04-34-59.metrics.json
+[INFO ] 2022-09-28 04:35:02,157 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_2022-09-28_04-34-59.config.xml
+[INFO ] 2022-09-28 04:35:02,235 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_2022-09-28_04-34-59.results.csv with window size 5
+[INFO ] 2022-09-28 04:35:02,417 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:35:02,417 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [ 580] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.OrderStatus/03                      [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [   0] 
+
+[0;1mAborted Transactions:[0;0m
+<EMPTY>
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [125222] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:35:02,418 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: lsd - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+Waiting for all workers to be ready (4 / 5)
+Waiting for all workers to be ready (4 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:38:36,498 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/lsd/psql_Sca1_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:38:36,500 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:38:37,105 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:38:37,261 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC_LSD Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:38:37,312 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC_LSD] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[0.0, 100.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:38:37,313 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:40:37,316 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:40:37,327 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:40:37,645 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:40:37,645 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000048121, measuredRequests=112763) = 939.6912898426287 requests/sec (throughput), 11.674995318229586 requests/sec (goodput)
+[INFO ] 2022-09-28 04:40:37,703 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_lsd_2022-09-28_04-40-37.raw.csv
+[INFO ] 2022-09-28 04:40:39,893 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-40-37.samples.csv
+[INFO ] 2022-09-28 04:40:40,017 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-40-37.custom.csv
+[INFO ] 2022-09-28 04:40:40,080 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_lsd_2022-09-28_04-40-37.summary.json
+[INFO ] 2022-09-28 04:40:40,095 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_lsd_2022-09-28_04-40-37.params.json
+[INFO ] 2022-09-28 04:40:40,110 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_lsd_2022-09-28_04-40-37.metrics.json
+[INFO ] 2022-09-28 04:40:40,143 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_lsd_2022-09-28_04-40-37.config.xml
+[INFO ] 2022-09-28 04:40:40,239 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_lsd_2022-09-28_04-40-37.results.csv with window size 5
+[INFO ] 2022-09-28 04:40:40,483 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:40:40,483 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [   0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [1401] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [   0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [   0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [   0] 
+
+[0;1mAborted Transactions:[0;0m
+<EMPTY>
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [111372] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:40:40,483 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: base - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+Waiting for all workers to be ready (5 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:45:12,863 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/base/psql_Sca10_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:45:12,865 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:45:13,454 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:45:13,606 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:45:13,673 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[0.0, 100.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:45:13,675 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:47:13,679 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:47:13,690 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:47:13,934 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:47:13,935 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120001015671, measuredRequests=74238) = 618.6447638371172 requests/sec (throughput), 52.99955141577178 requests/sec (goodput)
+[INFO ] 2022-09-28 04:47:14,109 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_2022-09-28_04-47-14.raw.csv
+[INFO ] 2022-09-28 04:47:15,681 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-47-14.samples.csv
+[INFO ] 2022-09-28 04:47:15,799 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_2022-09-28_04-47-14.custom.csv
+[INFO ] 2022-09-28 04:47:15,850 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_2022-09-28_04-47-14.summary.json
+[INFO ] 2022-09-28 04:47:15,864 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_2022-09-28_04-47-14.params.json
+[INFO ] 2022-09-28 04:47:15,881 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_2022-09-28_04-47-14.metrics.json
+[INFO ] 2022-09-28 04:47:15,909 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_2022-09-28_04-47-14.config.xml
+[INFO ] 2022-09-28 04:47:15,989 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_2022-09-28_04-47-14.results.csv with window size 5
+[INFO ] 2022-09-28 04:47:16,119 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:47:16,119 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.NewOrder/01                         [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [6360] ********************************************************************************
+com.oltpbenchmark.benchmarks.tpcc.procedures.OrderStatus/03                      [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.Delivery/04                         [   0] 
+com.oltpbenchmark.benchmarks.tpcc.procedures.StockLevel/05                       [   0] 
+
+[0;1mAborted Transactions:[0;0m
+<EMPTY>
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.tpcc.procedures.Payment/02                          [67889] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:47:16,119 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Waiting for load to be completed...
+===================================================================================================================================
+Waiting for charmander-4
+charmander-4 is ready!
+===================================================================================================================================
+Running test - Type: lsd - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+Waiting for all workers to be ready (2 / 5)
+Waiting for all workers to be ready (2 / 5)
+All workers ready (5 / 5)!
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:51:50,687 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/b3057e2b-9965-43d6-991f-6357a1096d29/tpcc/lsd/psql_Sca10_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:51:50,689 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:51:51,322 [main]  com.oltpbenchmark.DBWorkload runWorkload - Creating 10 virtual terminals...
+[INFO ] 2022-09-28 04:51:51,475 [main]  com.oltpbenchmark.DBWorkload runWorkload - Launching the TPCC_LSD Benchmark with 1 Phase...
+[INFO ] 2022-09-28 04:51:51,523 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mPHASE START[0;0m :: [Workload=TPCC_LSD] [Serial=false] [Time=120] [WarmupTime=0] [Rate=10000] [Arrival=REGULAR] [Ratios=[0.0, 100.0, 0.0, 0.0, 0.0]] [ActiveWorkers=10]
+[INFO ] 2022-09-28 04:51:51,524 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mMEASURE[0;0m :: Warmup complete, starting measurements.
+[INFO ] 2022-09-28 04:53:51,527 [main]  com.oltpbenchmark.ThreadBench runRateLimitedMultiPhase - [0;1mTERMINATE[0;0m :: Waiting for all terminals to finish ..
+[INFO ] 2022-09-28 04:53:51,543 [Thread-10]  com.oltpbenchmark.ThreadBench run - Starting WatchDogThread
+[INFO ] 2022-09-28 04:53:51,750 [main]  com.oltpbenchmark.DBWorkload runWorkload - ======================================================================
+[INFO ] 2022-09-28 04:53:51,751 [main]  com.oltpbenchmark.DBWorkload runWorkload - Rate limited reqs/s: Results(nanoSeconds=120000099316, measuredRequests=67443) = 562.0245348497608 requests/sec (throughput), 141.30821638194317 requests/sec (goodput)
+[INFO ] 2022-09-28 04:53:51,821 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output Raw data into file: tpcc_lsd_2022-09-28_04-53-51.raw.csv
+[INFO ] 2022-09-28 04:53:53,083 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-53-51.samples.csv
+[INFO ] 2022-09-28 04:53:53,186 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output samples into file: tpcc_lsd_2022-09-28_04-53-51.custom.csv
+[INFO ] 2022-09-28 04:53:53,222 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output summary data into file: tpcc_lsd_2022-09-28_04-53-51.summary.json
+[INFO ] 2022-09-28 04:53:53,236 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS parameters into file: tpcc_lsd_2022-09-28_04-53-51.params.json
+[INFO ] 2022-09-28 04:53:53,251 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output DBMS metrics into file: tpcc_lsd_2022-09-28_04-53-51.metrics.json
+[INFO ] 2022-09-28 04:53:53,278 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output benchmark config into file: tpcc_lsd_2022-09-28_04-53-51.config.xml
+[INFO ] 2022-09-28 04:53:53,365 [main]  com.oltpbenchmark.DBWorkload writeOutputs - Output results into file: tpcc_lsd_2022-09-28_04-53-51.results.csv with window size 5
+[INFO ] 2022-09-28 04:53:53,510 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+[INFO ] 2022-09-28 04:53:53,511 [main]  com.oltpbenchmark.DBWorkload writeHistograms - Workload Histograms:
+
+[0;1mCompleted Transactions:[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.NewOrder/01                     [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [16957] ********************************************************************************
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.OrderStatus/03                  [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Delivery/04                     [    0] 
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.StockLevel/05                   [    0] 
+
+[0;1mAborted Transactions:[0;0m
+<EMPTY>
+
+[0;1mRejected Transactions (Server Retry):[0;0m
+com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.Payment/02                      [50496] ********************************************************************************
+
+[0;1mRejected Transactions (Retry Different):[0;0m
+<EMPTY>
+
+[0;1mUnexpected SQL Errors:[0;0m
+<EMPTY>
+
+[0;1mUnknown Status Transactions:[0;0m
+<EMPTY>
+
+
+[INFO ] 2022-09-28 04:53:53,511 [main]  com.oltpbenchmark.DBWorkload writeHistograms - ======================================================================
+~/tparreira
+===================================================================================================================================
+Benchmarks completed!
+===================================================================================================================================
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================

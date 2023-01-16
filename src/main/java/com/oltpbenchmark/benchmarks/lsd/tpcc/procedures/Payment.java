@@ -27,11 +27,12 @@ import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.FutureCustomer;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.FutureDistrict;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.FutureWarehouse;
 import kotlin.Unit;
-import lsd.v2.api.Future;
-import lsd.v2.api.FutureConnection;
-import lsd.v2.api.FutureResultSet;
-import lsd.v2.api.FutureStatementCondition;
-import lsd.v2.api.PreparedFutureStatement;
+import trxsys.lsd.api.FutureResultChain;
+import trxsys.lsd.future.Future;
+import trxsys.lsd.api.FutureConnection;
+import trxsys.lsd.api.FutureResultSet;
+import trxsys.lsd.api.FutureStatementCondition;
+import trxsys.lsd.api.PreparedFutureStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,7 +151,7 @@ public class Payment extends FutureTPCCProcedure {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            return Unit.INSTANCE;
+
         });
 
         creditStatus.whenFalse(() -> {
@@ -160,7 +161,6 @@ public class Payment extends FutureTPCCProcedure {
                 e.printStackTrace();
             }
 
-            return Unit.INSTANCE;
         });
 
 //        if (c.c_credit.equals("BC")) {
@@ -209,13 +209,12 @@ public class Payment extends FutureTPCCProcedure {
         payUpdateWhse.setInt(2, w_id);
         // MySQL reports deadlocks due to lock upgrades:
         // t1: read w_id = x; t2: update w_id = x; t1 update w_id = x
-        payUpdateWhse.executeFutureUpdate();
+        FutureResultChain<Integer> result = payUpdateWhse.executeFutureUpdate();
 
-        payUpdateWhse.afterUpdateExecution((operationResult -> {
-            if (operationResult.get() == 0) {
+        result.then((operationResult -> {
+            if (operationResult == 0) {
                 throw new RuntimeException("W_ID=" + w_id + " not found!");
             }
-            return Unit.INSTANCE;
         }));
     }
 
@@ -224,16 +223,9 @@ public class Payment extends FutureTPCCProcedure {
         payGetWhse.setInt(1, w_id);
         FutureResultSet rs = payGetWhse.executeFutureQuery();
 
-        payGetWhse.afterQueryExecution(operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("W_ID=" + w_id + " not found!");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
 
-            return Unit.INSTANCE;
+        rs.ifEmpty(() -> {
+            throw new RuntimeException("W_ID=" + w_id + " not found!");
         });
 
         FutureWarehouse w = new FutureWarehouse();
@@ -278,13 +270,12 @@ public class Payment extends FutureTPCCProcedure {
         payUpdateDist.setInt(2, w_id);
         payUpdateDist.setInt(3, districtID);
 
-        payUpdateDist.executeFutureUpdate();
+        FutureResultChain<Integer> result = payUpdateDist.executeFutureUpdate();
 
-        payUpdateDist.afterUpdateExecution((operationResult -> {
-            if (operationResult.get() == 0) {
+        result.then((operationResult -> {
+            if (operationResult == 0) {
                 throw new RuntimeException("D_ID=" + districtID + " D_W_ID=" + w_id + " not found!");
             }
-            return Unit.INSTANCE;
         }));
     }
 
@@ -294,17 +285,8 @@ public class Payment extends FutureTPCCProcedure {
         payGetDist.setInt(2, districtID);
 
         FutureResultSet rs = payGetDist.executeFutureQuery();
-
-        payGetDist.afterQueryExecution(operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("D_ID=" + districtID + " D_W_ID=" + w_id + " not found!");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            return Unit.INSTANCE;
+        rs.ifEmpty(() -> {
+            throw new RuntimeException("D_ID=" + districtID + " D_W_ID=" + w_id + " not found!");
         });
 
         FutureDistrict d = new FutureDistrict();
@@ -323,16 +305,9 @@ public class Payment extends FutureTPCCProcedure {
 
         FutureResultSet rs = payGetCustCdata.executeFutureQuery();
 
-        payGetCustCdata.afterQueryExecution(operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("C_ID=" + c.c_id + " C_W_ID=" + customerWarehouseID + " C_D_ID=" + customerDistrictID + " not found!");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
 
-            return Unit.INSTANCE;
+        rs.ifEmpty(() -> {
+            throw new RuntimeException("C_ID=" + c.c_id + " C_W_ID=" + customerWarehouseID + " C_D_ID=" + customerDistrictID + " not found!");
         });
         Future<String> c_data;
         payGetCustCdata.setInt(1, customerWarehouseID);
@@ -370,13 +345,12 @@ public class Payment extends FutureTPCCProcedure {
         payUpdateCustBalCdata.setInt(6, customerDistrictID);
         payUpdateCustBalCdata.setFutureInt(7, c.c_id);
 
-        payUpdateCustBalCdata.executeFutureUpdate();
+        FutureResultChain<Integer> result = payUpdateCustBalCdata.executeFutureUpdate();
 
-        payUpdateCustBalCdata.afterUpdateExecution((operationResult -> {
-            if (operationResult.get() == 0) {
+        result.then((operationResult -> {
+            if (operationResult == 0) {
                 throw new RuntimeException("Error in PYMNT Txn updating Customer C_ID=" + c.c_id + " C_W_ID=" + customerWarehouseID + " C_D_ID=" + customerDistrictID);
             }
-            return Unit.INSTANCE;
         }));
     }
 
@@ -390,13 +364,12 @@ public class Payment extends FutureTPCCProcedure {
         payUpdateCustBal.setInt(5, customerDistrictID);
         payUpdateCustBal.setFutureInt(6, c.c_id);
 
-        payUpdateCustBal.executeFutureUpdate();
+        FutureResultChain<Integer> result = payUpdateCustBal.executeFutureUpdate();
 
-        payUpdateCustBal.afterUpdateExecution((operationResult -> {
-            if (operationResult.get() == 0) {
+        result.then((operationResult -> {
+            if (operationResult == 0) {
                 throw new RuntimeException("C_ID=" + c.c_id + " C_W_ID=" + customerWarehouseID + " C_D_ID=" + customerDistrictID + " not found!");
             }
-            return Unit.INSTANCE;
         }));
     }
 
@@ -441,16 +414,8 @@ public class Payment extends FutureTPCCProcedure {
 
         FutureResultSet rs = payGetCust.executeFutureQuery();
 
-        payGetCust.afterQueryExecution(operationResultSet -> {
-            try {
-                if (operationResultSet.get().isClosed()) {
-                    throw new RuntimeException("C_ID=" + c_id + " C_D_ID=" + c_d_id + " C_W_ID=" + c_w_id + " not found!");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            return Unit.INSTANCE;
+        rs.ifEmpty(() -> {
+            throw new RuntimeException("C_ID=" + c_id + " C_D_ID=" + c_d_id + " C_W_ID=" + c_w_id + " not found!");
         });
 
         FutureCustomer c = TPCCUtil.newFutureCustomerFromResults(rs);
@@ -471,22 +436,22 @@ public class Payment extends FutureTPCCProcedure {
 
         FutureResultSet rs = customerByName.executeFutureQuery();
 
-        customerByName.afterQueryExecution(operationResultSet -> {
+        rs.then(operationResultSet -> {
             try {
                 if (LOG.isTraceEnabled()) {
                     LOG.trace("C_LAST={} C_D_ID={} C_W_ID={}", customerLastName, c_d_id, c_w_id);
                 }
 
-                if (operationResultSet.get().isClosed()) {
+                if (operationResultSet.isClosed()) {
                     throw new RuntimeException("C_LAST=" + customerLastName + " C_D_ID=" + c_d_id + " C_W_ID=" + c_w_id + " not found!");
                 }
 
                 // TPC-C 2.5.2.2: Position n / 2 rounded up to the next integer, but
                 // that
                 // counts starting from 1.
-                operationResultSet.get().last();
-                int rowCount = operationResultSet.get().getRow();
-                operationResultSet.get().beforeFirst();
+                operationResultSet.last();
+                int rowCount = operationResultSet.getRow();
+                operationResultSet.beforeFirst();
                 int index = rowCount / 2;
                 if (rowCount % 2 == 0) {
                     index -= 1;
@@ -494,12 +459,11 @@ public class Payment extends FutureTPCCProcedure {
 
                 int i = 0;
                 //noinspection StatementWithEmptyBody
-                while (operationResultSet.get().next() && i++ < index) ;
+                while (operationResultSet.next() && i++ < index) ;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            return Unit.INSTANCE;
         });
 
         FutureCustomer customer = TPCCUtil.newFutureCustomerFromResults(rs);

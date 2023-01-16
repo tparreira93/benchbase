@@ -1,0 +1,954 @@
+===================================================================================================================================
+Host charmander-4 running in /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705 directory
+===================================================================================================================================
+===================================================================================================================================
+Starting run 105 with 5 workers, /home/jlourenco/tparreira/tests.txt test file and charmander-4 database...
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: base - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: base - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:36:42,076 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/base/psql_Sca1_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:36:42,077 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:36:42,122 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC database...
+[INFO ] 2022-09-28 03:36:42,896 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC database...
+[INFO ] 2022-09-28 03:36:43,209 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC database...
+[INFO ] 2022-09-28 03:36:43,217 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 2 to run 2 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 03:39:35,790 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 2 Loader Threads [time=172.56s]
+[INFO ] 2022-09-28 03:39:35,791 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC database...
+[INFO ] 2022-09-28 03:39:35,792 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (3 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down....... done
+server stopped
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: lsd - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: lsd - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:42:32,141 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/lsd/psql_Sca1_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:42:32,142 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:42:32,181 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC_LSD database...
+[INFO ] 2022-09-28 03:42:32,886 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC_LSD database...
+[INFO ] 2022-09-28 03:42:33,192 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 03:42:33,200 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 2 to run 2 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 03:45:25,076 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 2 Loader Threads [time=171.87s]
+[INFO ] 2022-09-28 03:45:25,078 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 03:45:25,078 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (1 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down....... done
+server stopped
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca1_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: base - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: base - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:48:03,807 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/base/psql_Sca10_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:48:03,809 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:48:03,849 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC database...
+[INFO ] 2022-09-28 03:48:04,383 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC database...
+[INFO ] 2022-09-28 03:48:04,705 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC database...
+[INFO ] 2022-09-28 03:48:04,712 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 11 to run 11 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 03:52:03,304 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 11 Loader Threads [time=238.59s]
+[INFO ] 2022-09-28 03:52:03,306 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC database...
+[INFO ] 2022-09-28 03:52:03,307 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (2 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down......................... done
+server stopped
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: lsd - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: lsd - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 03:54:59,649 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/lsd/psql_Sca10_Ter10_Dur120_NO100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 03:54:59,650 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 03:54:59,685 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC_LSD database...
+[INFO ] 2022-09-28 03:55:00,247 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC_LSD database...
+[INFO ] 2022-09-28 03:55:00,565 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 03:55:00,573 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 11 to run 11 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 03:58:54,521 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 11 Loader Threads [time=233.94s]
+[INFO ] 2022-09-28 03:58:54,523 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 03:58:54,523 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (1 / 5)
+Waiting for all workers to be ready (4 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down..................... done
+server stopped
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca10_Ter10_Dur120_NO100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: base - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: base - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:02:35,891 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/base/psql_Sca1_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:02:35,893 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:02:35,932 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC database...
+[INFO ] 2022-09-28 04:02:36,431 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC database...
+[INFO ] 2022-09-28 04:02:36,749 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC database...
+[INFO ] 2022-09-28 04:02:36,755 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 2 to run 2 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:05:29,021 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 2 Loader Threads [time=172.26s]
+[INFO ] 2022-09-28 04:05:29,023 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC database...
+[INFO ] 2022-09-28 04:05:29,024 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (1 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down....... done
+server stopped
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: lsd - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: lsd - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:08:55,031 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/lsd/psql_Sca1_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:08:55,032 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:08:55,071 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:08:55,627 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:08:55,952 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:08:55,960 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 2 to run 2 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:11:48,929 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 2 Loader Threads [time=172.97s]
+[INFO ] 2022-09-28 04:11:48,930 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:11:48,931 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (3 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down...... done
+server stopped
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca1_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: base - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: base - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:14:33,130 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/base/psql_Sca10_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:14:33,131 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:14:33,171 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC database...
+[INFO ] 2022-09-28 04:14:33,670 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC database...
+[INFO ] 2022-09-28 04:14:33,977 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC database...
+[INFO ] 2022-09-28 04:14:33,984 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 11 to run 11 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:18:27,036 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 11 Loader Threads [time=233.05s]
+[INFO ] 2022-09-28 04:18:27,038 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC database...
+[INFO ] 2022-09-28 04:18:27,039 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (3 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down.............................. done
+server stopped
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: lsd - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: lsd - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:21:33,315 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/lsd/psql_Sca10_Ter10_Dur120_ALL.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:21:33,317 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:21:33,355 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:21:33,887 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:21:34,199 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:21:34,207 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 11 to run 11 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:25:28,629 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 11 Loader Threads [time=234.42s]
+[INFO ] 2022-09-28 04:25:28,631 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:25:28,632 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (4 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down............................... done
+server stopped
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca10_Ter10_Dur120_ALL - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: base - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: base - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:29:13,937 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/base/psql_Sca1_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:29:13,938 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:29:13,975 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC database...
+[INFO ] 2022-09-28 04:29:14,525 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC database...
+[INFO ] 2022-09-28 04:29:14,832 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC database...
+[INFO ] 2022-09-28 04:29:14,838 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 2 to run 2 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:32:07,155 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 2 Loader Threads [time=172.31s]
+[INFO ] 2022-09-28 04:32:07,157 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC database...
+[INFO ] 2022-09-28 04:32:07,157 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down..... done
+server stopped
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: lsd - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: lsd - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:35:24,528 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/lsd/psql_Sca1_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  1.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:35:24,530 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:35:24,571 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:35:25,052 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:35:25,373 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:35:25,381 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 2 to run 2 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:38:16,706 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 2 Loader Threads [time=171.32s]
+[INFO ] 2022-09-28 04:38:16,708 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:38:16,709 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (1 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down..... done
+server stopped
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca1_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: base - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: base - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:41:03,381 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC {com.oltpbenchmark.benchmarks.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/base/psql_Sca10_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        org.postgresql.Driver
+URL:           jdbc:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:41:03,382 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:41:03,421 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC database...
+[INFO ] 2022-09-28 04:41:03,951 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC database...
+[INFO ] 2022-09-28 04:41:04,275 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC database...
+[INFO ] 2022-09-28 04:41:04,281 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 11 to run 11 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:45:03,082 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 11 Loader Threads [time=238.80s]
+[INFO ] 2022-09-28 04:45:03,084 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC database...
+[INFO ] 2022-09-28 04:45:03,085 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (4 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down.......... done
+server stopped
+===================================================================================================================================
+Finished Type: base - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc
+===================================================================================================================================
+===================================================================================================================================
+Loading database - Type: lsd - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+===================================================================================================================================
+Starting database...
+===================================================================================================================================
+The files belonging to this database system will be owned by user "jlourenco".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /tmp/tparreira/psql/databases ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Portugal
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    /home/jlourenco/tparreira/pgsql/bin/pg_ctl -D /tmp/tparreira/psql/databases -l logfile start
+
+waiting for server to start.... done
+server started
+===================================================================================================================================
+The server has started!
+===================================================================================================================================
+===================================================================================================================================
+Building database - Type: lsd - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================
+~/tparreira/new-benchbase-postgres ~/tparreira
+[INFO ] 2022-09-28 04:47:50,140 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+
+Benchmark:     TPCC_LSD {com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCBenchmark}
+Configuration: /tmp/tparreira/1e61de33-a1f5-4067-8976-bdb91f7e4705/tpcc/lsd/psql_Sca10_Ter10_Dur120_PA100.xml
+Type:          POSTGRES
+Driver:        trxsys.lsd.Driver
+URL:           jdbc:lsd:postgresql://charmander-4/benchbase?sslmode=disable&ApplicationName=tpcc&reWriteBatchedInserts=true
+Isolation:     TRANSACTION_SERIALIZABLE
+Batch Size:    128
+Scale Factor:  10.0
+Terminals:     10
+
+[INFO ] 2022-09-28 04:47:50,142 [main]  com.oltpbenchmark.DBWorkload main - ======================================================================
+[INFO ] 2022-09-28 04:47:50,184 [main]  com.oltpbenchmark.DBWorkload main - Creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:47:50,715 [main]  com.oltpbenchmark.DBWorkload main - Finished creating new TPCC_LSD database...
+[INFO ] 2022-09-28 04:47:51,025 [main]  com.oltpbenchmark.DBWorkload main - Loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:47:51,033 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Creating a Thread Pool with a size of 11 to run 11 Loader Threads.  0 threads will be queued.
+[INFO ] 2022-09-28 04:51:42,936 [main]  com.oltpbenchmark.util.ThreadUtil runLoaderThreads - Finished executing 11 Loader Threads [time=231.90s]
+[INFO ] 2022-09-28 04:51:42,939 [main]  com.oltpbenchmark.DBWorkload main - Finished loading data into TPCC_LSD database...
+[INFO ] 2022-09-28 04:51:42,940 [main]  com.oltpbenchmark.DBWorkload main - Skipping benchmark workload execution
+~/tparreira
+===================================================================================================================================
+Database was built!
+===================================================================================================================================
+===================================================================================================================================
+Setting load as completed...
+===================================================================================================================================
+===================================================================================================================================
+Load completed!
+===================================================================================================================================
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (0 / 5)
+Waiting for all workers to be ready (1 / 5)
+All workers ready (5 / 5)!
+waiting for server to shut down............ done
+server stopped
+===================================================================================================================================
+Finished Type: lsd - Config: psql_Sca10_Ter10_Dur120_PA100 - Benchmark: tpcc_lsd
+===================================================================================================================================

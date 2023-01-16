@@ -21,7 +21,7 @@ import com.oltpbenchmark.api.SQLStmt;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCConstants;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCUtil;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCWorker;
-import lsd.v2.api.FutureConnection;
+import trxsys.lsd.api.FutureConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

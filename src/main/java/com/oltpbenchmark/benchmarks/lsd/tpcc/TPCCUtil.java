@@ -21,8 +21,8 @@ package com.oltpbenchmark.benchmarks.lsd.tpcc;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.Customer;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.FutureCustomer;
 import com.oltpbenchmark.util.RandomGenerator;
-import lsd.v2.api.Future;
-import lsd.v2.api.FutureResultSet;
+import trxsys.lsd.future.Future;
+import trxsys.lsd.api.FutureResultSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

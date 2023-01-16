@@ -18,7 +18,7 @@ function wait_worker() {
 
     worker=$1
     ready_location=$2
-
+    
     workers_ready=$(ls $ready_location/$worker-ready 2> /dev/null | wc -l)
     echo "Waiting for $worker"
     until [ $workers_ready -eq 1 ]
@@ -35,7 +35,7 @@ function wait_all_workers() {
 
     ready_location=$1
     workers_count=$2
-
+    
     workers_ready=$(ls $ready_location/*ready 2> /dev/null | wc -l)
     echo "Waiting for all workers to be ready ($workers_ready / $workers_count)"
     until [ $workers_ready -eq $workers_count ]

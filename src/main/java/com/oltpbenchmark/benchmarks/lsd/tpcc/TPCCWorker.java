@@ -23,7 +23,7 @@ import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.procedures.FutureTPCCProcedure;
 import com.oltpbenchmark.types.TransactionStatus;
-import lsd.v2.api.FutureConnection;
+import trxsys.lsd.api.FutureConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-JAVA_OPTIONS="-Xms2g -Xmx2g -Djava.util.logging.config.file=logging.properties"
+JAVA_OPTIONS="-XX:+UseG1GC -Xms4g -Xmx4g -Djava.util.logging.config.file=logging.properties"
 
 function build_db() {
     local benchbase_dir

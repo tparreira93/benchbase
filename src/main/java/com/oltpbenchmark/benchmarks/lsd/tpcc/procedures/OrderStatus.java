@@ -23,7 +23,7 @@ import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCUtil;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.TPCCWorker;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.Customer;
 import com.oltpbenchmark.benchmarks.lsd.tpcc.pojo.Oorder;
-import lsd.v2.api.FutureConnection;
+import trxsys.lsd.api.FutureConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

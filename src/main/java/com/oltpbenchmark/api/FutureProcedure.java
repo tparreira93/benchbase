@@ -17,25 +17,15 @@
 
 package com.oltpbenchmark.api;
 
-import com.oltpbenchmark.jdbc.AutoIncrementPreparedStatement;
 import com.oltpbenchmark.types.DatabaseType;
-import lsd.v2.api.Future;
-import lsd.v2.api.FutureConnection;
-import lsd.v2.api.FutureStatement;
-import lsd.v2.api.PreparedFutureStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import trxsys.lsd.api.FutureConnection;
+import trxsys.lsd.api.PreparedFutureStatement;
+import trxsys.lsd.future.Future;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class FutureProcedure extends Procedure {
     private static final Logger LOG = LoggerFactory.getLogger(FutureProcedure.class);
